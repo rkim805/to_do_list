@@ -1,4 +1,3 @@
-import {getDate, isToday} from "date-fns";
 import { projectList } from "./storage";
 
 window.onload = () => {
@@ -21,6 +20,7 @@ const createTaskForm = () => {
   form.id = "add-task-form";
 
   addTaskFormInputs(form);
+  addProjectSelector(form);
   addTaskFormButtons(form);
   return form;
 }
@@ -45,10 +45,25 @@ const addTaskFormInputs = (inputlessForm) => {
   inputlessForm.append(dateInput);
 }
 
-const projectSelector = (form) => {
+const addProjectSelector = (form) => {
   const selector = document.createElement("select");
   selector.name = "project";
   selector.id = "project-selector";
+
+  const inboxOption = document.createElement("option");
+  inboxOption.value = "inbox";
+  inboxOption.innerText = "Inbox";
+
+  selector.append(inboxOption);
+
+  for(project of projectList) {
+    let projectOption = document.createElement("option");
+    projectOption.value = project.title;
+    projectOption.innerText = project.title;
+    selector.append(projectOption);
+  }
+  
+  form.append(selector);
 }
 
 const addTaskFormButtons = (btnlessForm) => {

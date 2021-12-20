@@ -1,8 +1,9 @@
 import {todoFactory, projectFactory} from "./projectObj";
+import {getDate, isToday} from "date-fns";
 
 //default project
 const inbox = new Map();
-const projectList = new Map();
+const projectList = [];
 
 const today = new Map();
 const thisWeek = new Map();
