@@ -2,7 +2,7 @@ const todoFactory = (title, descrption, dueDate, priority) => {
   const setPriorityHigh = () => priority = "high";
   const setPriorityMid = () => priority = "mid";
   const setPriorityLow = () => priority = "low";
-  const setPriorityNone = () => priority = "";
+  const setPriorityNone = () => priority = "none";
 
   return {title, descrption, dueDate, setPriorityHigh, 
     setPriorityMid, setPriorityLow, setPriorityNone};

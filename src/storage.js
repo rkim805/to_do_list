@@ -9,7 +9,7 @@ const today = new Map();
 const thisWeek = new Map();
 
 
-const storeTodo = (title, description, dueDate, priority) => {
+const storeTodo = (title, description, dueDate, project, priority) => {
   const todo = todoFactory(title, description, dueDate, priority);
 
 };
