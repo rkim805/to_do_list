@@ -24,7 +24,7 @@ const today = new Map();
 const thisWeek = new Map();
 
 
-const storeTodo = (title, description, dueDate, priority) => {
+const storeTodo = (title, description, dueDate, project, priority) => {
   const todo = (0,_projectObj__WEBPACK_IMPORTED_MODULE_0__.todoFactory)(title, description, dueDate, priority);
 
 };
@@ -44,7 +44,7 @@ const todoFactory = (title, descrption, dueDate, priority) => {
   const setPriorityHigh = () => priority = "high";
   const setPriorityMid = () => priority = "mid";
   const setPriorityLow = () => priority = "low";
-  const setPriorityNone = () => priority = "";
+  const setPriorityNone = () => priority = "none";
 
   return {title, descrption, dueDate, setPriorityHigh, 
     setPriorityMid, setPriorityLow, setPriorityNone};
@@ -141,6 +141,7 @@ const createTaskForm = () => {
 
   addTaskFormInputs(form);
   addProjectSelector(form);
+  addPrioritySelector(form);
   addTaskFormButtons(form);
   return form;
 }
@@ -166,24 +167,39 @@ const addTaskFormInputs = (inputlessForm) => {
 }
 
 const addProjectSelector = (form) => {
-  const selector = document.createElement("select");
-  selector.name = "project";
-  selector.id = "project-selector";
+  const projectSelector = document.createElement("select");
+  projectSelector.name = "project";
+  projectSelector.id = "project-selector";
 
   const inboxOption = document.createElement("option");
   inboxOption.value = "inbox";
   inboxOption.innerText = "Inbox";
 
-  selector.append(inboxOption);
+  projectSelector.append(inboxOption);
 
-  for(project of _storage__WEBPACK_IMPORTED_MODULE_0__.projectList) {
+  for(const project of _storage__WEBPACK_IMPORTED_MODULE_0__.projectList) {
     let projectOption = document.createElement("option");
     projectOption.value = project.title;
     projectOption.innerText = project.title;
-    selector.append(projectOption);
+    projectSelector.append(projectOption);
   }
   
-  form.append(selector);
+  form.append(projectSelector);
+}
+
+const addPrioritySelector = (form) => {
+  const prioritySelector = document.createElement("select");
+  prioritySelector.name = "priority";
+  prioritySelector.id = "priority-selector";
+
+  const PRIORITY_MAX = 4;
+  for(let i = 1; i <= PRIORITY_MAX; i++) {
+    const priorityOption = document.createElement("option");
+    priorityOption.value = `Priority ${i}`;
+    priorityOption.innerText = `Priority ${i}`;
+    prioritySelector.append(priorityOption);
+  }
+  form.append(prioritySelector);
 }
 
 const addTaskFormButtons = (btnlessForm) => {
