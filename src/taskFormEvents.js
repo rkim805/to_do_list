@@ -21,11 +21,11 @@ const createTaskForm = () => {
 }
 
 const addTaskFormInputs = (inputlessForm) => {
-  const titleInput = document.createElement("input");
-  titleInput.type = "text";
-  titleInput.id = "title-input";
-  titleInput.placeholder = "Title";
+  const title = hiddenLabelInput("text", "title-input", "Title");
+  const description = hiddenLabelInput("text", "description-input", 
+  "Description");
 
+  //const descriptionInput = document.createElement("label");
   const descriptionInput = document.createElement("input");
   descriptionInput.type = "text";
   descriptionInput.id = "description-input";
@@ -35,9 +35,23 @@ const addTaskFormInputs = (inputlessForm) => {
   dateInput.type = "date";
   dateInput.id = "date-input";
 
-  inputlessForm.append(titleInput);
-  inputlessForm.append(descriptionInput);
+  inputlessForm.append(title.label);
+  inputlessForm.append(title.input);
+  inputlessForm.append(description.label);
+  inputlessForm.append(description.input);
   inputlessForm.append(dateInput);
+}
+
+const hiddenLabelInput = (inputType, id, placeholder="") => {
+  const label = document.createElement("label");
+  label.hidden = true;
+  label.for = id;
+  const input = document.createElement("input");
+  input.type = inputType;
+  input.id = id;
+  input.name = id;
+  input.placeholder = placeholder;
+  return {label, input};
 }
 
 const addPrioritySelector = (form) => {

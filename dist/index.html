@@ -15,7 +15,7 @@
         <li>This week</li>
       </ul>
       <ul>
-        <lh>Projects</lh>
+        <lh>Projects<button id="add-project-btn">+</button></lh>
       </ul>
     </nav>
     <div id="list-app">
@@ -23,6 +23,16 @@
       </ul>
       <button id="task-btn">Add Task</button>
     </div>
+    <form id="modal-form">
+      <label for="project-name">Name: </label><br>
+      <input type="text" id="project-name" name="project-name"><br>
+      <label for="color">Color: </label><br>
+      <select name="color" id="color">
+        <option value="red">Red</option>
+        <option value="green">Green</option>
+        <option value="blue">Blue</option>
+      </select>
+    </form>
     <footer>Copyright &copy; 2021 Ryan Kim</footer>
   </body>
 </html>
