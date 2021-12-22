@@ -1,15 +1,10 @@
-const todoFactory = (title, descrption, dueDate, priority) => {
-  const setPriorityHigh = () => priority = "high";
-  const setPriorityMid = () => priority = "mid";
-  const setPriorityLow = () => priority = "low";
-  const setPriorityNone = () => priority = "none";
-
-  return {title, descrption, dueDate, setPriorityHigh, 
-    setPriorityMid, setPriorityLow, setPriorityNone};
+const todoFactory = (title, descrption, dueDate, priority, id) => {
+  return {title, descrption, dueDate, priority, id};
 }
 
-const projectFactory = (title, todoList) => {
-  return {title, todoList};
+const projectFactory = () => {
+  const todoList = new Map();
+  return {todoList};
 }
 
 export {todoFactory, projectFactory};
