@@ -1,0 +1,38 @@
+html,body {
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  background-color: darkcyan;
+  padding: 5px 16px;
+  margin: 0px;
+  color: white;
+  width: 100%;
+}
+
+h1 {
+  font-size: 24px;
+}
+
+footer {
+  color: white;
+  height: 22px;
+  background-color: darkcyan;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+#primary-content {
+  flex: 1 0 auto;
+}

@@ -1,4 +1,5 @@
 import {addTaskEvent, dynamicFormEvent} from "./taskFormEvents";
+import './style.css';
 
 window.onload = () => {
   const addTaskBtn = document.querySelector("#task-btn");

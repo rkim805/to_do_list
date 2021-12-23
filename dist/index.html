@@ -8,30 +8,37 @@
     <header>
       <h1>Todo List</h1>
     </header>
-    <nav>
-      <ul>
-        <li>Inbox</li>
-        <li>Today</li>
-        <li>This week</li>
-      </ul>
-      <ul>
-        <lh>Projects<button id="add-project-btn">+</button></lh>
-      </ul>
-    </nav>
-    <div id="list-app">
-      <ul id="listed-todos">
-      </ul>
-      <button id="task-btn">Add Task</button>
+    <div id="primary-content">
+      <nav>
+        <ul>
+          <li>Inbox</li>
+          <li>Today</li>
+          <li><i></i>This week</li>
+          <li>Projects<button>+</button>
+            <ul>
+              <li>Test</li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <div id="list-app">
+        <ul id="listed-todos">
+        </ul>
+        <button id="task-btn">Add Task</button>
+      </div>
     </div>
     <form id="modal-form">
       <label for="project-name">Name: </label><br>
       <input type="text" id="project-name" name="project-name"><br>
       <label for="color">Color: </label><br>
       <select name="color" id="color">
-        <option value="red">Red</option>
-        <option value="green">Green</option>
-        <option value="blue">Blue</option>
+        <option value="red">R</option>
+        <option value="green">G</option>
+        <option value="blue">B</option>
       </select>
+      <br>
+      <button type="button" id="project-add-btn">Add</button>
+      <button type="button" id="modal-cancel-btn">Cancel</button>
     </form>
     <footer>Copyright &copy; 2021 Ryan Kim</footer>
   </body>

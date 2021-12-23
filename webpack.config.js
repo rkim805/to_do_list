@@ -7,6 +7,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
    entry: {
      index: './src/index.js',
    },
+   module: {
+     rules: [
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
+     ],
+   },
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Todo List',

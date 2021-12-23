@@ -24,12 +24,8 @@ const addTaskFormInputs = (inputlessForm) => {
   const title = hiddenLabelInput("text", "title-input", "Title");
   const description = hiddenLabelInput("text", "description-input", 
   "Description");
+  const date = hiddenLabelInput("date", "date-input");
 
-  //const descriptionInput = document.createElement("label");
-  const descriptionInput = document.createElement("input");
-  descriptionInput.type = "text";
-  descriptionInput.id = "description-input";
-  descriptionInput.placeholder = "Description";
 
   const dateInput = document.createElement("input");
   dateInput.type = "date";
@@ -39,9 +35,19 @@ const addTaskFormInputs = (inputlessForm) => {
   inputlessForm.append(title.input);
   inputlessForm.append(description.label);
   inputlessForm.append(description.input);
-  inputlessForm.append(dateInput);
+  inputlessForm.append(date.label);
+  inputlessForm.append(date.input);
 }
 
+/**
+ * hiddenLabelInput
+ * 
+ * @param {string} inputType -- value of type attribute of input
+ * @param {string} id -- for attribute of label, id/name attribute of input
+ * @param {string} placeholder  -- value of placeholder attribute of input
+ * @returns Object containing {label, input} for specified options, with label
+ * hidden.
+ */
 const hiddenLabelInput = (inputType, id, placeholder="") => {
   const label = document.createElement("label");
   label.hidden = true;
