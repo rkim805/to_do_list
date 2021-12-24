@@ -11,10 +11,14 @@
     <div id="primary-content">
       <nav>
         <ul>
-          <li>Inbox</li>
-          <li>Today</li>
-          <li><i></i>This week</li>
-          <li>Projects<button>+</button>
+          <li><i class="fas fa-inbox"></i> Inbox</li>
+          <li><i class="far fa-calendar-check"></i> Today</li>
+          <li><i class="far fa-calendar-alt"></i> This week</li>
+          <li>Projects
+            <button class="show-modal-btn">
+              <i class="fas fa-plus show-modal-btn"></i>
+            </button>
+          </li>
             <ul>
               <li>Test</li>
             </ul>
@@ -27,19 +31,22 @@
         <button id="task-btn">Add Task</button>
       </div>
     </div>
-    <form id="modal-form">
-      <label for="project-name">Name: </label><br>
-      <input type="text" id="project-name" name="project-name"><br>
-      <label for="color">Color: </label><br>
-      <select name="color" id="color">
-        <option value="red">R</option>
-        <option value="green">G</option>
-        <option value="blue">B</option>
-      </select>
-      <br>
-      <button type="button" id="project-add-btn">Add</button>
-      <button type="button" id="modal-cancel-btn">Cancel</button>
-    </form>
+    <div class="modal">
+      <form id="modal-form">
+        <label for="project-name">Name: </label><br>
+        <input type="text" id="project-name" name="project-name"><br>
+        <label for="color">Color: </label><br>
+        <select name="color" id="color">
+          <option value="gray"></option>
+          <option value="red">R</option>
+          <option value="green">G</option>
+          <option value="blue">B</option>
+        </select>
+        <br>
+        <button type="button" id="project-add-btn">Add</button>
+        <button type="button" id="close-modal-btn">Cancel</button>
+      </form>
+    </div>
     <footer>Copyright &copy; 2021 Ryan Kim</footer>
   </body>
 </html>

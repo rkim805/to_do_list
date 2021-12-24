@@ -141,6 +141,21 @@ const removeForm = () => {
   form.parentNode.removeChild(form);
 }
 
+const openModal = () => {
+  const modal = document.querySelector(".modal");
+  modal.style.display = "block";
+}
+
+const addProject = () => {
+  
+}
+
+const closeModal = () => {
+  const modal = document.querySelector(".modal");
+  
+  modal.style.display = "none";
+}
+
 export {
-  addTaskEvent, dynamicFormEvent
+  addTaskEvent, dynamicFormEvent, openModal, closeModal
 }

@@ -2,7 +2,6 @@ html,body {
   margin: 0px;
   padding: 0px;
   height: 100%;
-  width: 100%;
 }
 
 body {
@@ -13,16 +12,17 @@ body {
 header {
   display: flex;
   align-items: center;
+  box-sizing: border-box;
   height: 44px;
+  width: 100%;
   background-color: darkcyan;
   padding: 5px 16px;
   margin: 0px;
   color: white;
-  width: 100%;
 }
 
 h1 {
-  font-size: 24px;
+  font-size: 32px;
 }
 
 footer {
@@ -31,8 +31,70 @@ footer {
   background-color: darkcyan;
   text-align: center;
   flex-shrink: 0;
+  width: 100%
 }
 
 #primary-content {
   flex: 1 0 auto;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  padding-top: 50px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#modal-form {
+  position: relative;
+  background-color: white;
+  padding: 20px;
+  margin: auto;
+  width: 75%;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 200px;
+  width: 15%;
+  background-color:#ededf3;
+}
+
+ul {
+  list-style-type: none;
+  font-size: 24px;
+}
+
+li {
+  margin: 16px 0px;
+}
+
+/* Remove default button styling for Font Awesome Icon button */
+.show-modal-btn {
+  border: none;
+  padding: 0;
+  outline: inherit;
+  background: none;
+  color: gray;
+  font: inherit;
+  margin-left: 5px;
+}
+
+.fa-plus:hover {
+  color: black;
+}
+
+#primary-content {
+  display: flex;
+}
+
+#list-app {
+  margin-left: 20px;
 }
