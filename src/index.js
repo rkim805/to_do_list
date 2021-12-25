@@ -12,6 +12,7 @@ window.onload = () => {
 
   const closeModalBtn = document.querySelector("#close-modal-btn");
   closeModalBtn.addEventListener("click", closeModal);
+  
   //event delegator
   document.addEventListener("click", dynamicFormEvent);
 };

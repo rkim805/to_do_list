@@ -23,8 +23,9 @@ const createTaskForm = () => {
 const addTaskFormInputs = (inputlessForm) => {
   const title = hiddenLabelInput("text", "title-input", "Title");
   const description = hiddenLabelInput("text", "description-input", 
-  "Description");
+  "Description", true);
   const date = hiddenLabelInput("date", "date-input");
+  const newLine = document.createElement("br");
 
 
   const dateInput = document.createElement("input");
@@ -33,6 +34,7 @@ const addTaskFormInputs = (inputlessForm) => {
 
   inputlessForm.append(title.label);
   inputlessForm.append(title.input);
+  inputlessForm.append(newLine);
   inputlessForm.append(description.label);
   inputlessForm.append(description.input);
   inputlessForm.append(date.label);
@@ -45,15 +47,25 @@ const addTaskFormInputs = (inputlessForm) => {
  * @param {string} inputType -- value of type attribute of input
  * @param {string} id -- for attribute of label, id/name attribute of input
  * @param {string} placeholder  -- value of placeholder attribute of input
+ * @param {bool} multiLine -- bool indicating whether input should be a
+ *                            contentEditable div for multiline input.
  * @returns Object containing {label, input} for specified options, with label
  * hidden.
  */
-const hiddenLabelInput = (inputType, id, placeholder="") => {
+const hiddenLabelInput = (inputType, id, placeholder="", multiLine = false) => {
   const label = document.createElement("label");
   label.hidden = true;
   label.for = id;
-  const input = document.createElement("input");
-  input.type = inputType;
+  let input;
+  if(multiLine) {
+    input = document.createElement("div");
+    input.contentEditable = "true";
+    input.dataset.ph =  placeholder;
+  }
+  else {
+    input = document.createElement("input");
+    input.type = inputType;
+  }
   input.id = id;
   input.name = id;
   input.placeholder = placeholder;

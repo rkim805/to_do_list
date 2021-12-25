@@ -38,8 +38,9 @@ const createTaskForm = () => {
 const addTaskFormInputs = (inputlessForm) => {
   const title = hiddenLabelInput("text", "title-input", "Title");
   const description = hiddenLabelInput("text", "description-input", 
-  "Description");
+  "Description", true);
   const date = hiddenLabelInput("date", "date-input");
+  const newLine = document.createElement("br");
 
 
   const dateInput = document.createElement("input");
@@ -48,6 +49,7 @@ const addTaskFormInputs = (inputlessForm) => {
 
   inputlessForm.append(title.label);
   inputlessForm.append(title.input);
+  inputlessForm.append(newLine);
   inputlessForm.append(description.label);
   inputlessForm.append(description.input);
   inputlessForm.append(date.label);
@@ -60,15 +62,25 @@ const addTaskFormInputs = (inputlessForm) => {
  * @param {string} inputType -- value of type attribute of input
  * @param {string} id -- for attribute of label, id/name attribute of input
  * @param {string} placeholder  -- value of placeholder attribute of input
+ * @param {bool} multiLine -- bool indicating whether input should be a
+ *                            contentEditable div for multiline input.
  * @returns Object containing {label, input} for specified options, with label
  * hidden.
  */
-const hiddenLabelInput = (inputType, id, placeholder="") => {
+const hiddenLabelInput = (inputType, id, placeholder="", multiLine = false) => {
   const label = document.createElement("label");
   label.hidden = true;
   label.for = id;
-  const input = document.createElement("input");
-  input.type = inputType;
+  let input;
+  if(multiLine) {
+    input = document.createElement("div");
+    input.contentEditable = "true";
+    input.dataset.ph =  placeholder;
+  }
+  else {
+    input = document.createElement("input");
+    input.type = inputType;
+  }
   input.id = id;
   input.name = id;
   input.placeholder = placeholder;
@@ -609,7 +621,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "html,body {\n  margin: 0px;\n  padding: 0px;\n  height: 100%;\n}\n\nbody {\n  display: flex;\n  flex-direction: column;\n}\n\nheader {\n  display: flex;\n  align-items: center;\n  box-sizing: border-box;\n  height: 44px;\n  width: 100%;\n  background-color: darkcyan;\n  padding: 5px 16px;\n  margin: 0px;\n  color: white;\n}\n\nh1 {\n  font-size: 32px;\n}\n\nfooter {\n  color: white;\n  height: 22px;\n  background-color: darkcyan;\n  text-align: center;\n  flex-shrink: 0;\n  width: 100%\n}\n\n#primary-content {\n  flex: 1 0 auto;\n}\n\n.modal {\n  display: none;\n  position: fixed;\n  padding-top: 50px;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background-color: black;\n  background-color: rgba(0, 0, 0, 0.5);\n}\n\n#modal-form {\n  position: relative;\n  background-color: white;\n  padding: 20px;\n  margin: auto;\n  width: 75%;\n}\n\nnav {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  min-width: 200px;\n  width: 15%;\n  background-color:#ededf3;\n}\n\nul {\n  list-style-type: none;\n  font-size: 24px;\n}\n\nli {\n  margin: 16px 0px;\n}\n\n/* Remove default button styling for Font Awesome Icon button */\n.show-modal-btn {\n  border: none;\n  padding: 0;\n  outline: inherit;\n  background: none;\n  color: gray;\n  font: inherit;\n  margin-left: 5px;\n}\n\n.fa-plus:hover {\n  color: black;\n}\n\n#primary-content {\n  display: flex;\n}\n\n#list-app {\n  margin-left: 20px;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "html,body {\n  margin: 0px;\n  padding: 0px;\n  height: 100%;\n}\n\nbody {\n  display: flex;\n  flex-direction: column;\n}\n\nheader {\n  display: flex;\n  align-items: center;\n  box-sizing: border-box;\n  height: 44px;\n  width: 100%;\n  background-color: #333;\n  padding: 5px 16px;\n  margin: 0px;\n  color: white;\n}\n\nh1 {\n  font-size: 32px;\n}\n\nfooter {\n  color: white;\n  height: 22px;\n  background-color: #333;\n  text-align: center;\n  flex-shrink: 0;\n  width: 100%\n}\n\n#primary-content {\n  flex: 1 0 auto;\n}\n\n.modal {\n  display: none;\n  position: fixed;\n  padding-top: 50px;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background-color: black;\n  background-color: rgba(0, 0, 0, 0.5);\n}\n\n#modal-form {\n  position: relative;\n  background-color: white;\n  padding: 5px 24px 20px 24px;\n  margin: auto;\n  width: 240px;\n  border-radius: 5px;\n}\n\n.modal-header {\n  position: relative;\n  display: flex;\n  align-items: center;\n  color: black;\n  background-color: white;\n  border-bottom: 1px solid #ddd;\n  margin-bottom: 5px;\n}\n\ninput {\n  margin: 10px 0px;\n}\n\n#modal-form button {\n  margin: 10px 0px;\n  padding: 5px;\n  border-radius: 5px;\n  border: none;\n}\n\n#project-add-btn {\n  background-color: rgb(77, 77, 185);\n  color: white;\n}\n\n#project-add-btn:hover {\n  background-color: rgb(48, 64, 151);\n}\n\n#close-modal-btn {\n  background-color: #bbbbbb;\n}\n\n#close-modal-btn:hover {\n  background-color: #a8a8a8;\n}\n\nnav {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  min-width: 200px;\n  width: 15%;\n  background-color:#ededf3;\n}\n\nul {\n  list-style-type: none;\n  font-size: 24px;\n}\n\nli {\n  margin: 16px 0px;\n}\n\n/* Remove default button styling for Font Awesome Icon button */\n.show-modal-btn {\n  border: none;\n  padding: 0;\n  outline: inherit;\n  background: none;\n  color: gray;\n  font: inherit;\n  margin-left: 5px;\n}\n\n.fa-plus:hover {\n  color: black;\n}\n\n#primary-content {\n  display: flex;\n}\n\n#list-app {\n  margin-left: 20px;\n}\n\n#title-input, #description-input {\n  padding: 3px;\n  width: 100%;\n  margin: 0px;\n  border: solid;\n  border-width: 1px;\n  border-radius: 2px;\n}\n\n#description-input {\n  height: 80px;\n}\n\n/* Create placeholder for contentEditable divs with text equal to data-ph*/\n#description-input[contentEditable=true]:empty:before {\n   content: attr(data-ph);\n   color: #999\n};", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -5308,6 +5320,7 @@ window.onload = () => {
 
   const closeModalBtn = document.querySelector("#close-modal-btn");
   closeModalBtn.addEventListener("click", _FormEvents__WEBPACK_IMPORTED_MODULE_0__.closeModal);
+  
   //event delegator
   document.addEventListener("click", _FormEvents__WEBPACK_IMPORTED_MODULE_0__.dynamicFormEvent);
 };

@@ -15,7 +15,7 @@ header {
   box-sizing: border-box;
   height: 44px;
   width: 100%;
-  background-color: darkcyan;
+  background-color: #333;
   padding: 5px 16px;
   margin: 0px;
   color: white;
@@ -28,7 +28,7 @@ h1 {
 footer {
   color: white;
   height: 22px;
-  background-color: darkcyan;
+  background-color: #333;
   text-align: center;
   flex-shrink: 0;
   width: 100%
@@ -53,9 +53,48 @@ footer {
 #modal-form {
   position: relative;
   background-color: white;
-  padding: 20px;
+  padding: 5px 24px 20px 24px;
   margin: auto;
-  width: 75%;
+  width: 240px;
+  border-radius: 5px;
+}
+
+.modal-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: black;
+  background-color: white;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 5px;
+}
+
+input {
+  margin: 10px 0px;
+}
+
+#modal-form button {
+  margin: 10px 0px;
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+}
+
+#project-add-btn {
+  background-color: rgb(77, 77, 185);
+  color: white;
+}
+
+#project-add-btn:hover {
+  background-color: rgb(48, 64, 151);
+}
+
+#close-modal-btn {
+  background-color: #bbbbbb;
+}
+
+#close-modal-btn:hover {
+  background-color: #a8a8a8;
 }
 
 nav {
@@ -98,3 +137,22 @@ li {
 #list-app {
   margin-left: 20px;
 }
+
+#title-input, #description-input {
+  padding: 3px;
+  width: 100%;
+  margin: 0px;
+  border: solid;
+  border-width: 1px;
+  border-radius: 2px;
+}
+
+#description-input {
+  height: 80px;
+}
+
+/* Create placeholder for contentEditable divs with text equal to data-ph*/
+#description-input[contentEditable=true]:empty:before {
+   content: attr(data-ph);
+   color: #999
+};
