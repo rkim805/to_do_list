@@ -10,7 +10,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "addTaskEvent": () => (/* binding */ addTaskEvent),
 /* harmony export */   "dynamicFormEvent": () => (/* binding */ dynamicFormEvent),
 /* harmony export */   "openModal": () => (/* binding */ openModal),
-/* harmony export */   "closeModal": () => (/* binding */ closeModal)
+/* harmony export */   "closeModal": () => (/* binding */ closeModal),
+/* harmony export */   "handleColorChange": () => (/* binding */ handleColorChange)
 /* harmony export */ });
 /* harmony import */ var _storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 
@@ -96,7 +97,9 @@ const addPrioritySelector = (form) => {
   for(let i = 1; i <= PRIORITY_MAX; i++) {
     const priorityOption = document.createElement("option");
     priorityOption.value = `Priority ${i}`;
-    priorityOption.innerText = `Priority ${i}`;
+    priorityOption.class = "fa";
+    //priorityOption.innerText = `Priority ${i}`;
+    priorityOption.innerText = "&#f024";
     prioritySelector.append(priorityOption);
   }
   form.append(prioritySelector);
@@ -181,6 +184,12 @@ const closeModal = () => {
   const modal = document.querySelector(".modal");
   
   modal.style.display = "none";
+}
+
+const handleColorChange = () => {
+  const colorWrapper = document.querySelector(".color-wrapper");
+  const colorPicker = document.querySelector("#project-color");
+  colorWrapper.style.backgroundColor = colorPicker.value;
 }
 
 
@@ -621,7 +630,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "html,body {\n  margin: 0px;\n  padding: 0px;\n  height: 100%;\n}\n\nbody {\n  display: flex;\n  flex-direction: column;\n}\n\nheader {\n  display: flex;\n  align-items: center;\n  box-sizing: border-box;\n  height: 44px;\n  width: 100%;\n  background-color: #333;\n  padding: 5px 16px;\n  margin: 0px;\n  color: white;\n}\n\nh1 {\n  font-size: 32px;\n}\n\nfooter {\n  color: white;\n  height: 22px;\n  background-color: #333;\n  text-align: center;\n  flex-shrink: 0;\n  width: 100%\n}\n\n#primary-content {\n  flex: 1 0 auto;\n}\n\n.modal {\n  display: none;\n  position: fixed;\n  padding-top: 50px;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background-color: black;\n  background-color: rgba(0, 0, 0, 0.5);\n}\n\n#modal-form {\n  position: relative;\n  background-color: white;\n  padding: 5px 24px 20px 24px;\n  margin: auto;\n  width: 240px;\n  border-radius: 5px;\n}\n\n.modal-header {\n  position: relative;\n  display: flex;\n  align-items: center;\n  color: black;\n  background-color: white;\n  border-bottom: 1px solid #ddd;\n  margin-bottom: 5px;\n}\n\ninput {\n  margin: 10px 0px;\n}\n\n#modal-form button {\n  margin: 10px 0px;\n  padding: 5px;\n  border-radius: 5px;\n  border: none;\n}\n\n#project-add-btn {\n  background-color: rgb(77, 77, 185);\n  color: white;\n}\n\n#project-add-btn:hover {\n  background-color: rgb(48, 64, 151);\n}\n\n#close-modal-btn {\n  background-color: #bbbbbb;\n}\n\n#close-modal-btn:hover {\n  background-color: #a8a8a8;\n}\n\nnav {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  min-width: 200px;\n  width: 15%;\n  background-color:#ededf3;\n}\n\nul {\n  list-style-type: none;\n  font-size: 24px;\n}\n\nli {\n  margin: 16px 0px;\n}\n\n/* Remove default button styling for Font Awesome Icon button */\n.show-modal-btn {\n  border: none;\n  padding: 0;\n  outline: inherit;\n  background: none;\n  color: gray;\n  font: inherit;\n  margin-left: 5px;\n}\n\n.fa-plus:hover {\n  color: black;\n}\n\n#primary-content {\n  display: flex;\n}\n\n#list-app {\n  margin-left: 20px;\n}\n\n#title-input, #description-input {\n  padding: 3px;\n  width: 100%;\n  margin: 0px;\n  border: solid;\n  border-width: 1px;\n  border-radius: 2px;\n}\n\n#description-input {\n  height: 80px;\n}\n\n/* Create placeholder for contentEditable divs with text equal to data-ph*/\n#description-input[contentEditable=true]:empty:before {\n   content: attr(data-ph);\n   color: #999\n};", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "html,body {\n  margin: 0px;\n  padding: 0px;\n  height: 100%;\n}\n\nbody {\n  display: flex;\n  flex-direction: column;\n}\n\nheader {\n  display: flex;\n  align-items: center;\n  box-sizing: border-box;\n  height: 44px;\n  width: 100%;\n  background-color: #333;\n  padding: 5px 16px;\n  margin: 0px;\n  color: white;\n}\n\nh1 {\n  font-size: 32px;\n}\n\nfooter {\n  color: white;\n  height: 22px;\n  background-color: #333;\n  text-align: center;\n  flex-shrink: 0;\n  width: 100%\n}\n\n#primary-content {\n  flex: 1 0 auto;\n}\n\n.modal {\n  display: none;\n  position: fixed;\n  padding-top: 50px;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background-color: black;\n  background-color: rgba(0, 0, 0, 0.5);\n}\n\n#modal-form {\n  position: relative;\n  background-color: white;\n  padding: 5px 24px 20px 24px;\n  margin: auto;\n  width: 240px;\n  border-radius: 5px;\n}\n\n.modal-header {\n  position: relative;\n  display: flex;\n  align-items: center;\n  color: black;\n  background-color: white;\n  border-bottom: 1px solid #ddd;\n  margin-bottom: 5px;\n}\n\ninput {\n  margin: 10px 0px;\n}\n\n#modal-form button {\n  margin: 5px 0px 10px 0px;\n  padding: 5px;\n  border-radius: 5px;\n  border: none;\n}\n\n#project-add-btn {\n  background-color: rgb(77, 77, 185);\n  color: white;\n}\n\n#project-add-btn:hover {\n  background-color: rgb(48, 64, 151);\n}\n\n#close-modal-btn {\n  background-color: #bbbbbb;\n}\n\n#close-modal-btn:hover {\n  background-color: #a8a8a8;\n}\n\nnav {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  min-width: 200px;\n  width: 15%;\n  background-color:#ededf3;\n}\n\nul {\n  list-style-type: none;\n  font-size: 24px;\n}\n\nli {\n  margin: 16px 0px;\n}\n\n/* Remove default button styling for Font Awesome Icon button */\n.show-modal-btn {\n  border: none;\n  padding: 0;\n  outline: inherit;\n  background: none;\n  color: gray;\n  font: inherit;\n}\n\n.fa-plus-square:hover {\n  color: black;\n}\n\n#primary-content {\n  display: flex;\n}\n\n#list-app {\n  margin-left: 20px;\n}\n\n#title-input, #description-input {\n  padding: 3px;\n  width: 100%;\n  margin: 0px;\n  border: solid;\n  border-width: 1px;\n  border-radius: 2px;\n}\n\n#description-input {\n  height: 80px;\n}\n\n/* Create placeholder for contentEditable divs with text equal to data-ph*/\n#description-input[contentEditable=true]:empty:before {\n   content: attr(data-ph);\n   color: #999\n};\n\n#add-task-btn-form input, #add-task-btn-form select{ \n  margin-left: 2px;\n}\n\n\n#project-color {\n  visibility: hidden;\n}\n\n.color-wrapper {\n  display: block;\n  height: 48px;\n  width: 48px;\n  border-radius: 50%;\n  border-style: double;\n  border-width: 5px;\n  border-color: #d3d3d3;\n  background-color: #808080;\n  margin-top: 10px;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -5305,8 +5314,8 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _FormEvents__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var _fortawesome_fontawesome_free_js_all__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(14);
-/* harmony import */ var _fortawesome_fontawesome_free_js_all__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_fontawesome_free_js_all__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _fortawesome_fontawesome_free_js_all_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(14);
+/* harmony import */ var _fortawesome_fontawesome_free_js_all_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_fontawesome_free_js_all_js__WEBPACK_IMPORTED_MODULE_2__);
 
 
 
@@ -5320,6 +5329,9 @@ window.onload = () => {
 
   const closeModalBtn = document.querySelector("#close-modal-btn");
   closeModalBtn.addEventListener("click", _FormEvents__WEBPACK_IMPORTED_MODULE_0__.closeModal);
+
+  const colorPicker = document.querySelector("#project-color");
+  colorPicker.addEventListener("change", _FormEvents__WEBPACK_IMPORTED_MODULE_0__.handleColorChange);
   
   //event delegator
   document.addEventListener("click", _FormEvents__WEBPACK_IMPORTED_MODULE_0__.dynamicFormEvent);

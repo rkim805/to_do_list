@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Todo List</title>
   <script defer src="main.js"></script></head>
-  <body>
+    <body>
     <header>
       <h1>Todo List</h1>
     </header>
@@ -14,9 +14,9 @@
           <li><i class="fas fa-inbox"></i> Inbox</li>
           <li><i class="far fa-calendar-check"></i> Today</li>
           <li><i class="far fa-calendar-alt"></i> This week</li>
-          <li>Projects
+          <li><i class="fas fa-arrow-right"></i> Projects
             <button class="show-modal-btn">
-              <i class="fas fa-plus show-modal-btn"></i>
+              <i class="fas fa-plus-square show-modal-btn"></i>
             </button>
           </li>
             <ul>
@@ -38,13 +38,11 @@
         </header>
         <label for="project-name">Name: </label><br>
         <input type="text" id="project-name" name="project-name"><br>
-        <label for="color">Color: </label><br>
-        <select name="color" id="color">
-          <option value="gray"></option>
-          <option value="red">R</option>
-          <option value="green">G</option>
-          <option value="blue">B</option>
-        </select>
+        <label for="project-color">Color: </label><br>
+          <label class="color-wrapper">
+            <input type="color" id="project-color" name="project-color" 
+              value="#808080">
+          </label>
         <br>
         <button type="button" id="project-add-btn">Add</button>
         <button type="button" id="close-modal-btn">Cancel</button>
