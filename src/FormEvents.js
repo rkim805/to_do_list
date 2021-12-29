@@ -81,7 +81,9 @@ const addPrioritySelector = (form) => {
   for(let i = 1; i <= PRIORITY_MAX; i++) {
     const priorityOption = document.createElement("option");
     priorityOption.value = `Priority ${i}`;
-    priorityOption.innerText = `Priority ${i}`;
+    priorityOption.class = "fa";
+    //priorityOption.innerText = `Priority ${i}`;
+    priorityOption.innerText = "&#f024";
     prioritySelector.append(priorityOption);
   }
   form.append(prioritySelector);
@@ -168,6 +170,12 @@ const closeModal = () => {
   modal.style.display = "none";
 }
 
+const handleColorChange = () => {
+  const colorWrapper = document.querySelector(".color-wrapper");
+  const colorPicker = document.querySelector("#project-color");
+  colorWrapper.style.backgroundColor = colorPicker.value;
+}
+
 export {
-  addTaskEvent, dynamicFormEvent, openModal, closeModal
+  addTaskEvent, dynamicFormEvent, openModal, closeModal, handleColorChange
 }

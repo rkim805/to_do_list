@@ -1,7 +1,7 @@
-import {addTaskEvent, dynamicFormEvent, openModal, closeModal} from 
+import {addTaskEvent, dynamicFormEvent, openModal, closeModal, handleColorChange} from 
 "./FormEvents";
 import './style.css';
-import '@fortawesome/fontawesome-free/js/all'
+import '@fortawesome/fontawesome-free/js/all.js';
 
 window.onload = () => {
   const addTaskBtn = document.querySelector("#task-btn");
@@ -12,6 +12,9 @@ window.onload = () => {
 
   const closeModalBtn = document.querySelector("#close-modal-btn");
   closeModalBtn.addEventListener("click", closeModal);
+
+  const colorPicker = document.querySelector("#project-color");
+  colorPicker.addEventListener("change", handleColorChange);
   
   //event delegator
   document.addEventListener("click", dynamicFormEvent);
