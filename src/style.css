@@ -83,7 +83,7 @@ input {
   border: none;
 }
 
-#add-project-btn {
+#add-project-btn, #edit-project-btn {
   background-color: rgb(77, 77, 185);
   color: white;
 }
@@ -138,9 +138,19 @@ li {
   font: inherit;
 }
 
-.fa-plus-square:hover {
+.show-modal-btn:hover {
   color: black;
 }
+
+.edit-icon-btn, .delete-icon-btn {
+  border: none;
+  padding: 0;
+  outline: inherit;
+  background: none;
+  color: black;
+  font: inherit;
+}
+
 
 #primary-content {
   display: flex;
@@ -213,17 +223,14 @@ li {
 
 .delete-icon, .edit-icon {
   float: right;
-  margin-right: 5px;
+  margin-right: 7px;
 }
 
 .project-icon {
   margin-right: 5px;
 }
 
-.delete-icon {
-  margin: 0px 10px;
-}
-
-.delete-icon {
-  margin: 0px 10px;
+/* Used to ensure Font Awesome icon spans are clicked instead of svgs */
+nav svg:active {
+  pointer-events: none;
 }
