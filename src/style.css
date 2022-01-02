@@ -7,6 +7,9 @@ html,body {
 body {
   display: flex;
   flex-direction: column;
+  font-family: 'Dancing Script', cursive;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
 }
 
 header {
@@ -16,7 +19,7 @@ header {
   height: 44px;
   width: 100%;
   background-color: #333;
-  padding: 5px 16px;
+  padding: 10px 16px;
   margin: 0px;
   color: white;
 }
@@ -80,12 +83,12 @@ input {
   border: none;
 }
 
-#project-add-btn {
+#add-project-btn {
   background-color: rgb(77, 77, 185);
   color: white;
 }
 
-#project-add-btn:hover {
+#add-project-btn:hover {
   background-color: rgb(48, 64, 151);
 }
 
@@ -97,12 +100,22 @@ input {
   background-color: #a8a8a8;
 }
 
+#task-btn {
+  border: none;
+  font-size: 16px;
+  background-color: white;
+}
+
+#task-btn:hover {
+  border: none;
+  color: orangered
+}
+
 nav {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 200px;
-  width: 15%;
+  min-width: 240px;
   background-color:#ededf3;
 }
 
@@ -175,4 +188,42 @@ li {
   border-color: #d3d3d3;
   background-color: #808080;
   margin-top: 10px;
+}
+
+.dropdown-content { 
+  display: none;
+  background-color: #f3f3f3;
+  max-width: 160px;
+}
+
+#project-list li {
+  font-size: 18px;
+}
+
+#project-list {
+  margin-right: 5px;
+}
+
+.project-info {
+  overflow: hidden;
+  width: 10ch;
+  display: inline-block;
+  text-overflow: ellipsis;
+}
+
+.delete-icon, .edit-icon {
+  float: right;
+  margin-right: 5px;
+}
+
+.project-icon {
+  margin-right: 5px;
+}
+
+.delete-icon {
+  margin: 0px 10px;
+}
+
+.delete-icon {
+  margin: 0px 10px;
 }

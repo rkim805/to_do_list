@@ -9,14 +9,27 @@ const today = new Map();
 const thisWeek = new Map();
 
 
-//incrementing ID counter for each created todo. Creates unique IDs for each
-//todo.
-let toDoIDCounter = -1;
+/*Module pattern that contains methods to manage unique IDs for 
+each project and ID. */
+const idManager = (() => {
+  let toDoIDCounter = -1;
+  let projectCounter = -1;
+  
+  const assignTodoID = () => {
+    toDoIDCounter++;
+    return toDoIDCounter;
+  };
+  
+  const assignProjectID = () => {
+    projectCounter++;
+    return projectCounter;
+  };
+  return {
+    assignProjectID, 
+    assignTodoID
+  }
+})();
 
-const assignID = () => {
-  toDoIDCounter++;
-  return toDoIDCounter;
-}
 /**
  * storeTodo - Create a todo and store it in respective project,
  * and date maps if it falls within today/this week.
@@ -33,12 +46,24 @@ const assignID = () => {
 const storeTodo = (title, description, dueDate, priority, projectName) => {
   const todo = todoFactory(title, description, dueDate, priority);
   if(projectName === "inbox") {
-    inbox.set(assignID(), todo);
+    inbox.set(idManager.assignTodoID(), todo);
   }
   else {
     const project = projectList.get(projectName);
-    project.set(assignID(), todo);
+    project.set(idManager.assignTodoID(), todo);
   }
 };
 
-export {inbox, projectList, today, thisWeek}
+const storeProject = (title, color) => {
+  const projectID = idManager.assignProjectID();
+  const newProject = projectFactory(title, color);
+  projectList.set(projectID, newProject);
+  return projectID;
+}
+
+const removeProjectData = (projectID) => {
+  projectList.delete(projectID);
+}
+
+export {inbox, projectList, today, thisWeek, storeProject, removeProjectData, 
+  storeTodo};

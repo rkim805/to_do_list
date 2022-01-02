@@ -8,10 +8,7 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "addTaskEvent": () => (/* binding */ addTaskEvent),
-/* harmony export */   "dynamicFormEvent": () => (/* binding */ dynamicFormEvent),
-/* harmony export */   "openModal": () => (/* binding */ openModal),
-/* harmony export */   "closeModal": () => (/* binding */ closeModal),
-/* harmony export */   "handleColorChange": () => (/* binding */ handleColorChange)
+/* harmony export */   "dynamicTodoFormEvent": () => (/* binding */ dynamicTodoFormEvent)
 /* harmony export */ });
 /* harmony import */ var _storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 
@@ -97,9 +94,7 @@ const addPrioritySelector = (form) => {
   for(let i = 1; i <= PRIORITY_MAX; i++) {
     const priorityOption = document.createElement("option");
     priorityOption.value = `Priority ${i}`;
-    priorityOption.class = "fa";
-    //priorityOption.innerText = `Priority ${i}`;
-    priorityOption.innerText = "&#f024";
+    priorityOption.innerText = `Priority ${i}`;
     prioritySelector.append(priorityOption);
   }
   form.append(prioritySelector);
@@ -141,7 +136,13 @@ const addTaskFormButtons = (btnlessForm) => {
   btnlessForm.append(cancelAddBtn);
 }
 
-const dynamicFormEvent = (e) => {
+
+/**
+ * Event handler for elements that are dynamically created for the todo form.
+ * @param {Event} e - Click event for submit and cancel buttons for the todo
+ * form
+ */
+const dynamicTodoFormEvent = (e) => {
   if(e.target && e.target.id === "confirm-add-btn") {
     confirmAddEvent();
   }
@@ -171,27 +172,6 @@ const removeForm = () => {
   form.parentNode.removeChild(form);
 }
 
-const openModal = () => {
-  const modal = document.querySelector(".modal");
-  modal.style.display = "block";
-}
-
-const addProject = () => {
-  
-}
-
-const closeModal = () => {
-  const modal = document.querySelector(".modal");
-  
-  modal.style.display = "none";
-}
-
-const handleColorChange = () => {
-  const colorWrapper = document.querySelector(".color-wrapper");
-  const colorPicker = document.querySelector("#project-color");
-  colorWrapper.style.backgroundColor = colorPicker.value;
-}
-
 
 
 /***/ }),
@@ -204,7 +184,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "inbox": () => (/* binding */ inbox),
 /* harmony export */   "projectList": () => (/* binding */ projectList),
 /* harmony export */   "today": () => (/* binding */ today),
-/* harmony export */   "thisWeek": () => (/* binding */ thisWeek)
+/* harmony export */   "thisWeek": () => (/* binding */ thisWeek),
+/* harmony export */   "storeProject": () => (/* binding */ storeProject),
+/* harmony export */   "removeProjectData": () => (/* binding */ removeProjectData),
+/* harmony export */   "storeTodo": () => (/* binding */ storeTodo)
 /* harmony export */ });
 /* harmony import */ var _projectObj__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
 
@@ -218,14 +201,27 @@ const today = new Map();
 const thisWeek = new Map();
 
 
-//incrementing ID counter for each created todo. Creates unique IDs for each
-//todo.
-let toDoIDCounter = -1;
+/*Module pattern that contains methods to manage unique IDs for 
+each project and ID. */
+const idManager = (() => {
+  let toDoIDCounter = -1;
+  let projectCounter = -1;
+  
+  const assignTodoID = () => {
+    toDoIDCounter++;
+    return toDoIDCounter;
+  };
+  
+  const assignProjectID = () => {
+    projectCounter++;
+    return projectCounter;
+  };
+  return {
+    assignProjectID, 
+    assignTodoID
+  }
+})();
 
-const assignID = () => {
-  toDoIDCounter++;
-  return toDoIDCounter;
-}
 /**
  * storeTodo - Create a todo and store it in respective project,
  * and date maps if it falls within today/this week.
@@ -242,13 +238,24 @@ const assignID = () => {
 const storeTodo = (title, description, dueDate, priority, projectName) => {
   const todo = (0,_projectObj__WEBPACK_IMPORTED_MODULE_0__.todoFactory)(title, description, dueDate, priority);
   if(projectName === "inbox") {
-    inbox.set(assignID(), todo);
+    inbox.set(idManager.assignTodoID(), todo);
   }
   else {
     const project = projectList.get(projectName);
-    project.set(assignID(), todo);
+    project.set(idManager.assignTodoID(), todo);
   }
 };
+
+const storeProject = (title, color) => {
+  const projectID = idManager.assignProjectID();
+  const newProject = (0,_projectObj__WEBPACK_IMPORTED_MODULE_0__.projectFactory)(title, color);
+  projectList.set(projectID, newProject);
+  return projectID;
+}
+
+const removeProjectData = (projectID) => {
+  projectList.delete(projectID);
+}
 
 
 
@@ -266,9 +273,9 @@ const todoFactory = (title, descrption, dueDate, priority, id) => {
   return {title, descrption, dueDate, priority, id};
 }
 
-const projectFactory = () => {
+const projectFactory = (title, color) => {
   const todoList = new Map();
-  return {todoList};
+  return {title, todoList, color};
 }
 
 
@@ -280,21 +287,147 @@ const projectFactory = () => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "openModal": () => (/* binding */ openModal),
+/* harmony export */   "addProject": () => (/* binding */ addProject),
+/* harmony export */   "closeModal": () => (/* binding */ closeModal),
+/* harmony export */   "handleColorChange": () => (/* binding */ handleColorChange),
+/* harmony export */   "dynamicProjectFormEvent": () => (/* binding */ dynamicProjectFormEvent)
+/* harmony export */ });
+/* harmony import */ var _storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+
+
+
+const openModal = () => {
+  const modal = document.querySelector(".modal");
+  modal.style.display = "block";
+}
+
+const closeModal = () => {
+  const modal = document.querySelector(".modal");
+  const projectName = document.querySelector("#project-name");
+  const projectColor = document.querySelector("#project-color");
+
+  //reset default from values upon modal form closing
+  projectName.value = "";
+  projectColor.value = "#808080";
+  modal.style.display = "none";
+}
+
+const addProject = () => {
+  const projectName = document.querySelector("#project-name");
+  if(!projectName.value) {
+    alert("Please enter a project name!");
+  }
+  else {
+    const projectColor = document.querySelector("#project-color");
+    const id = (0,_storage__WEBPACK_IMPORTED_MODULE_0__.storeProject)(projectName.value, projectColor.value);
+    displayNewProject(projectName.value, id, projectColor.value);
+  }
+}
+
+const displayNewProject = (projectName, projectID, projectColor) => {
+  const projectList = document.querySelector("#project-list");
+  const newProjectItem = document.createElement("li");
+  const projectInfo = document.createElement("span");
+  newProjectItem.setAttribute("data-id", projectID);
+  projectInfo.innerText = projectName + " ";
+  projectInfo.classList.add("project-info");
+  newProjectItem.append(projectInfo);
+
+  const colorIcon = createColorIcon(projectColor);
+  newProjectItem.prepend(colorIcon);
+  const editIcon = createEditIcon();
+  newProjectItem.append(editIcon);
+  const deleteIcon = createDeleteIcon();
+  newProjectItem.append(deleteIcon);
+
+  projectList.appendChild(newProjectItem);
+  closeModal();
+}
+
+const dynamicProjectFormEvent = (e) => {
+  //check e.target.parentNode as icon element is covered by SVG element
+  if(e.target && e.target.parentNode.classList.contains("delete-icon")) {
+    //get project ID belonging to the delete icon's project
+    const id = e.target.parentNode.parentNode.dataset.id;
+    deleteProjectDisplay(id);
+  }
+  else if(e.target && e.target.classList.contains("edit-icon")) {
+    //get project ID belonging to the edit icon's project
+    const id = e.target.parentNode.parentNode.dataset.id;
+  }
+}
+
+const deleteProjectDisplay = (projectID) => {
+  /*
+  const projectList = document.querySelector("#project-list");
+  for(let project in projectList.childNodes) {
+    console.log(project);
+    if(project.dataset.id === projectID) {
+      project.remove();
+      removeProjectData(projectID);
+      break;
+    }
+  }*/
+  const listElement = document.querySelector(`[data-id="${projectID}"]`);
+  listElement.remove();
+}
+
+const updateProjectDisplay = () => {
+
+}
+
+const createColorIcon = (iconColor) => {
+  const colorIcon = document.createElement("i");
+  colorIcon.classList.add("fa", "fa-circle", "project-icon");
+  colorIcon.classList.add("fa-circle");
+  colorIcon.classList.add("project-icon");
+  colorIcon.style.color = iconColor;
+  return colorIcon;
+}
+
+const createEditIcon = () => {
+  const editIcon = document.createElement("i");
+  editIcon.classList.add("fa", "fa-edit", "edit-icon");
+  return editIcon;
+}
+
+const createDeleteIcon = () => {
+  const deleteIcon = document.createElement("i");
+  deleteIcon.classList.add("fa", "fa-trash", "delete-icon");
+  return deleteIcon;
+}
+
+const handleColorChange = () => {
+  const colorWrapper = document.querySelector(".color-wrapper");
+  const colorPicker = document.querySelector("#project-color");
+  colorWrapper.style.backgroundColor = colorPicker.value;
+}
+
+
+
+/***/ }),
+/* 5 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(10);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(11);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _node_modules_css_loader_dist_cjs_js_style_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(11);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_style_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(12);
 
       
       
@@ -325,7 +458,7 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ ((module) => {
 
 "use strict";
@@ -435,7 +568,7 @@ module.exports = function (list, options) {
 };
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ ((module) => {
 
 "use strict";
@@ -511,7 +644,7 @@ function domAPI(options) {
 module.exports = domAPI;
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ ((module) => {
 
 "use strict";
@@ -556,7 +689,7 @@ function insertBySelector(insert, style) {
 module.exports = insertBySelector;
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -574,7 +707,7 @@ function setAttributesWithoutAttributes(styleElement) {
 module.exports = setAttributesWithoutAttributes;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ ((module) => {
 
 "use strict";
@@ -591,7 +724,7 @@ function insertStyleElement(options) {
 module.exports = insertStyleElement;
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ ((module) => {
 
 "use strict";
@@ -613,7 +746,7 @@ function styleTagTransform(css, styleElement) {
 module.exports = styleTagTransform;
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -621,22 +754,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(13);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
 // Imports
 
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "html,body {\n  margin: 0px;\n  padding: 0px;\n  height: 100%;\n}\n\nbody {\n  display: flex;\n  flex-direction: column;\n}\n\nheader {\n  display: flex;\n  align-items: center;\n  box-sizing: border-box;\n  height: 44px;\n  width: 100%;\n  background-color: #333;\n  padding: 5px 16px;\n  margin: 0px;\n  color: white;\n}\n\nh1 {\n  font-size: 32px;\n}\n\nfooter {\n  color: white;\n  height: 22px;\n  background-color: #333;\n  text-align: center;\n  flex-shrink: 0;\n  width: 100%\n}\n\n#primary-content {\n  flex: 1 0 auto;\n}\n\n.modal {\n  display: none;\n  position: fixed;\n  padding-top: 50px;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background-color: black;\n  background-color: rgba(0, 0, 0, 0.5);\n}\n\n#modal-form {\n  position: relative;\n  background-color: white;\n  padding: 5px 24px 20px 24px;\n  margin: auto;\n  width: 240px;\n  border-radius: 5px;\n}\n\n.modal-header {\n  position: relative;\n  display: flex;\n  align-items: center;\n  color: black;\n  background-color: white;\n  border-bottom: 1px solid #ddd;\n  margin-bottom: 5px;\n}\n\ninput {\n  margin: 10px 0px;\n}\n\n#modal-form button {\n  margin: 5px 0px 10px 0px;\n  padding: 5px;\n  border-radius: 5px;\n  border: none;\n}\n\n#project-add-btn {\n  background-color: rgb(77, 77, 185);\n  color: white;\n}\n\n#project-add-btn:hover {\n  background-color: rgb(48, 64, 151);\n}\n\n#close-modal-btn {\n  background-color: #bbbbbb;\n}\n\n#close-modal-btn:hover {\n  background-color: #a8a8a8;\n}\n\nnav {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  min-width: 200px;\n  width: 15%;\n  background-color:#ededf3;\n}\n\nul {\n  list-style-type: none;\n  font-size: 24px;\n}\n\nli {\n  margin: 16px 0px;\n}\n\n/* Remove default button styling for Font Awesome Icon button */\n.show-modal-btn {\n  border: none;\n  padding: 0;\n  outline: inherit;\n  background: none;\n  color: gray;\n  font: inherit;\n}\n\n.fa-plus-square:hover {\n  color: black;\n}\n\n#primary-content {\n  display: flex;\n}\n\n#list-app {\n  margin-left: 20px;\n}\n\n#title-input, #description-input {\n  padding: 3px;\n  width: 100%;\n  margin: 0px;\n  border: solid;\n  border-width: 1px;\n  border-radius: 2px;\n}\n\n#description-input {\n  height: 80px;\n}\n\n/* Create placeholder for contentEditable divs with text equal to data-ph*/\n#description-input[contentEditable=true]:empty:before {\n   content: attr(data-ph);\n   color: #999\n};\n\n#add-task-btn-form input, #add-task-btn-form select{ \n  margin-left: 2px;\n}\n\n\n#project-color {\n  visibility: hidden;\n}\n\n.color-wrapper {\n  display: block;\n  height: 48px;\n  width: 48px;\n  border-radius: 50%;\n  border-style: double;\n  border-width: 5px;\n  border-color: #d3d3d3;\n  background-color: #808080;\n  margin-top: 10px;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "html,body {\n  margin: 0px;\n  padding: 0px;\n  height: 100%;\n}\n\nbody {\n  display: flex;\n  flex-direction: column;\n  font-family: 'Dancing Script', cursive;\n  font-family: 'Montserrat', sans-serif;\n  font-weight: 800;\n}\n\nheader {\n  display: flex;\n  align-items: center;\n  box-sizing: border-box;\n  height: 44px;\n  width: 100%;\n  background-color: #333;\n  padding: 10px 16px;\n  margin: 0px;\n  color: white;\n}\n\nh1 {\n  font-size: 32px;\n}\n\nfooter {\n  color: white;\n  height: 22px;\n  background-color: #333;\n  text-align: center;\n  flex-shrink: 0;\n  width: 100%\n}\n\n#primary-content {\n  flex: 1 0 auto;\n}\n\n.modal {\n  display: none;\n  position: fixed;\n  padding-top: 50px;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background-color: black;\n  background-color: rgba(0, 0, 0, 0.5);\n}\n\n#modal-form {\n  position: relative;\n  background-color: white;\n  padding: 5px 24px 20px 24px;\n  margin: auto;\n  width: 240px;\n  border-radius: 5px;\n}\n\n.modal-header {\n  position: relative;\n  display: flex;\n  align-items: center;\n  color: black;\n  background-color: white;\n  border-bottom: 1px solid #ddd;\n  margin-bottom: 5px;\n}\n\ninput {\n  margin: 10px 0px;\n}\n\n#modal-form button {\n  margin: 5px 0px 10px 0px;\n  padding: 5px;\n  border-radius: 5px;\n  border: none;\n}\n\n#add-project-btn {\n  background-color: rgb(77, 77, 185);\n  color: white;\n}\n\n#add-project-btn:hover {\n  background-color: rgb(48, 64, 151);\n}\n\n#close-modal-btn {\n  background-color: #bbbbbb;\n}\n\n#close-modal-btn:hover {\n  background-color: #a8a8a8;\n}\n\n#task-btn {\n  border: none;\n  font-size: 16px;\n  background-color: white;\n}\n\n#task-btn:hover {\n  border: none;\n  color: orangered\n}\n\nnav {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  min-width: 240px;\n  background-color:#ededf3;\n}\n\nul {\n  list-style-type: none;\n  font-size: 24px;\n}\n\nli {\n  margin: 16px 0px;\n}\n\n/* Remove default button styling for Font Awesome Icon button */\n.show-modal-btn {\n  border: none;\n  padding: 0;\n  outline: inherit;\n  background: none;\n  color: gray;\n  font: inherit;\n}\n\n.fa-plus-square:hover {\n  color: black;\n}\n\n#primary-content {\n  display: flex;\n}\n\n#list-app {\n  margin-left: 20px;\n}\n\n#title-input, #description-input {\n  padding: 3px;\n  width: 100%;\n  margin: 0px;\n  border: solid;\n  border-width: 1px;\n  border-radius: 2px;\n}\n\n#description-input {\n  height: 80px;\n}\n\n/* Create placeholder for contentEditable divs with text equal to data-ph*/\n#description-input[contentEditable=true]:empty:before {\n   content: attr(data-ph);\n   color: #999\n};\n\n#add-task-btn-form input, #add-task-btn-form select{ \n  margin-left: 2px;\n}\n\n\n#project-color {\n  visibility: hidden;\n}\n\n.color-wrapper {\n  display: block;\n  height: 48px;\n  width: 48px;\n  border-radius: 50%;\n  border-style: double;\n  border-width: 5px;\n  border-color: #d3d3d3;\n  background-color: #808080;\n  margin-top: 10px;\n}\n\n.dropdown-content { \n  display: none;\n  background-color: #f3f3f3;\n  max-width: 160px;\n}\n\n#project-list li {\n  font-size: 18px;\n}\n\n#project-list {\n  margin-right: 5px;\n}\n\n.project-info {\n  overflow: hidden;\n  width: 10ch;\n  display: inline-block;\n  text-overflow: ellipsis;\n}\n\n.delete-icon, .edit-icon {\n  float: right;\n  margin-right: 5px;\n}\n\n.project-icon {\n  margin-right: 5px;\n}\n\n.delete-icon {\n  margin: 0px 10px;\n}\n\n.delete-icon {\n  margin: 0px 10px;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ ((module) => {
 
 "use strict";
@@ -647,7 +780,7 @@ module.exports = function (i) {
 };
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ ((module) => {
 
 "use strict";
@@ -755,7 +888,7 @@ module.exports = function (cssWithMappingToString) {
 };
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 /*!
@@ -5312,29 +5445,35 @@ var __webpack_exports__ = {};
 (() => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _FormEvents__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var _fortawesome_fontawesome_free_js_all_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(14);
-/* harmony import */ var _fortawesome_fontawesome_free_js_all_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_fontawesome_free_js_all_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _TodoFormEvents__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _ProjectFormEvents__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
+/* harmony import */ var _fortawesome_fontawesome_free_js_all_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
+/* harmony import */ var _fortawesome_fontawesome_free_js_all_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_fontawesome_free_js_all_js__WEBPACK_IMPORTED_MODULE_3__);
+
 
 
 
 
 window.onload = () => {
   const addTaskBtn = document.querySelector("#task-btn");
-  addTaskBtn.addEventListener("click", _FormEvents__WEBPACK_IMPORTED_MODULE_0__.addTaskEvent);
+  addTaskBtn.addEventListener("click", _TodoFormEvents__WEBPACK_IMPORTED_MODULE_0__.addTaskEvent);
 
   const showModalBtn = document.querySelector(".show-modal-btn");
-  showModalBtn.addEventListener("click", _FormEvents__WEBPACK_IMPORTED_MODULE_0__.openModal);
-
+  showModalBtn.addEventListener("click", _ProjectFormEvents__WEBPACK_IMPORTED_MODULE_1__.openModal);
   const closeModalBtn = document.querySelector("#close-modal-btn");
-  closeModalBtn.addEventListener("click", _FormEvents__WEBPACK_IMPORTED_MODULE_0__.closeModal);
-
+  closeModalBtn.addEventListener("click", _ProjectFormEvents__WEBPACK_IMPORTED_MODULE_1__.closeModal);
   const colorPicker = document.querySelector("#project-color");
-  colorPicker.addEventListener("change", _FormEvents__WEBPACK_IMPORTED_MODULE_0__.handleColorChange);
+  colorPicker.addEventListener("change", _ProjectFormEvents__WEBPACK_IMPORTED_MODULE_1__.handleColorChange);
+  const addProjectBtn = document.querySelector("#add-project-btn");
+  addProjectBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    (0,_ProjectFormEvents__WEBPACK_IMPORTED_MODULE_1__.addProject)()
+  });
   
-  //event delegator
-  document.addEventListener("click", _FormEvents__WEBPACK_IMPORTED_MODULE_0__.dynamicFormEvent);
+  //event delegators, used add listeners to dynamically created nodes
+  document.addEventListener("click", _TodoFormEvents__WEBPACK_IMPORTED_MODULE_0__.dynamicTodoFormEvent);
+  document.addEventListener("click", _ProjectFormEvents__WEBPACK_IMPORTED_MODULE_1__.dynamicProjectFormEvent);
 };
 })();
 

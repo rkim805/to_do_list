@@ -1,4 +1,4 @@
-import { projectList } from "./storage";
+import {storeTodo, projectList} from "./storage";
 
 const addTaskEvent = () => {
   const app = document.querySelector("#list-app");
@@ -81,9 +81,7 @@ const addPrioritySelector = (form) => {
   for(let i = 1; i <= PRIORITY_MAX; i++) {
     const priorityOption = document.createElement("option");
     priorityOption.value = `Priority ${i}`;
-    priorityOption.class = "fa";
-    //priorityOption.innerText = `Priority ${i}`;
-    priorityOption.innerText = "&#f024";
+    priorityOption.innerText = `Priority ${i}`;
     prioritySelector.append(priorityOption);
   }
   form.append(prioritySelector);
@@ -125,7 +123,13 @@ const addTaskFormButtons = (btnlessForm) => {
   btnlessForm.append(cancelAddBtn);
 }
 
-const dynamicFormEvent = (e) => {
+
+/**
+ * Event handler for elements that are dynamically created for the todo form.
+ * @param {Event} e - Click event for submit and cancel buttons for the todo
+ * form
+ */
+const dynamicTodoFormEvent = (e) => {
   if(e.target && e.target.id === "confirm-add-btn") {
     confirmAddEvent();
   }
@@ -155,27 +159,5 @@ const removeForm = () => {
   form.parentNode.removeChild(form);
 }
 
-const openModal = () => {
-  const modal = document.querySelector(".modal");
-  modal.style.display = "block";
-}
-
-const addProject = () => {
-  
-}
-
-const closeModal = () => {
-  const modal = document.querySelector(".modal");
-  
-  modal.style.display = "none";
-}
-
-const handleColorChange = () => {
-  const colorWrapper = document.querySelector(".color-wrapper");
-  const colorPicker = document.querySelector("#project-color");
-  colorWrapper.style.backgroundColor = colorPicker.value;
-}
-
 export {
-  addTaskEvent, dynamicFormEvent, openModal, closeModal, handleColorChange
-}
+  addTaskEvent, dynamicTodoFormEvent}

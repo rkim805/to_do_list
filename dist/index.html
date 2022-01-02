@@ -3,6 +3,9 @@
   <head>
     <meta charset="UTF-8">
     <title>Todo List</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat&display=swap" rel="stylesheet"> 
   <script defer src="main.js"></script></head>
     <body>
     <header>
@@ -19,8 +22,8 @@
               <i class="fas fa-plus-square show-modal-btn"></i>
             </button>
           </li>
-            <ul>
-              <li>Test</li>
+          <li>
+            <ul id="project-list">
             </ul>
           </li>
         </ul>
@@ -28,7 +31,7 @@
       <div id="list-app">
         <ul id="listed-todos">
         </ul>
-        <button id="task-btn">Add Task</button>
+        <button id="task-btn"><i class="fas fa-plus"></i> Add Task</button>
       </div>
     </div>
     <div class="modal">
@@ -37,14 +40,14 @@
           <h3>Add Project</h3>
         </header>
         <label for="project-name">Name: </label><br>
-        <input type="text" id="project-name" name="project-name"><br>
+        <input type="text" id="project-name" name="project-name"/><br>
         <label for="project-color">Color: </label><br>
           <label class="color-wrapper">
             <input type="color" id="project-color" name="project-color" 
-              value="#808080">
+              value="#808080" />
           </label>
         <br>
-        <button type="button" id="project-add-btn">Add</button>
+        <button type="submit" id="add-project-btn">Add</button>
         <button type="button" id="close-modal-btn">Cancel</button>
       </form>
     </div>
