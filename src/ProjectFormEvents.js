@@ -91,8 +91,6 @@ const updateProjectDisplay = (projectID) => {
 const createColorIcon = (iconColor) => {
   const colorIcon = document.createElement("i");
   colorIcon.classList.add("fa", "fa-circle", "project-icon");
-  colorIcon.classList.add("fa-circle");
-  colorIcon.classList.add("project-icon");
   colorIcon.style.color = iconColor;
   return colorIcon;
 }
