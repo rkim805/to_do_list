@@ -1,5 +1,6 @@
 import {addTaskEvent, dynamicTodoFormEvent} from "./TodoFormEvents";
-import {openModalAdd, addProject, closeModal, handleColorChange, dynamicProjectFormEvent, openModalEdit} from 
+import {openModalAdd, addProject, closeModal, handleColorChange, 
+  dynamicProjectFormEvent, handleEditProject} from 
   "./ProjectFormEvents"
 import './style.css';
 import '@fortawesome/fontawesome-free/js/all.js';
@@ -21,8 +22,13 @@ window.onload = () => {
     e.preventDefault();
     addProject();
   });
+  const editProjectBtn = document.querySelector("#edit-project-btn");
+  editProjectBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    handleEditProject();
+  });
   
-  //event delegators, used add listeners to dynamically created nodes
+  //event delegators, used add listeners to dynamically created elements
   document.addEventListener("click", dynamicTodoFormEvent);
   document.addEventListener("click", dynamicProjectFormEvent);
 };

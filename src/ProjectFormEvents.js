@@ -1,5 +1,7 @@
 import { formatRelative } from "date-fns";
-import {storeProject, removeProjectData} from "./storage";
+import {storeProject, removeProjectData, updateProject} from "./storage";
+
+let lastClickedProjectID = -1;
 
 const openModalAdd = () => {
   const editBtn = document.querySelector("#edit-project-btn");
@@ -10,7 +12,7 @@ const openModalAdd = () => {
   modal.style.display = "block";
 }
 
-const openModalEdit = (projectID) => {
+const openModalEdit = () => {
   const editBtn = document.querySelector("#edit-project-btn");
   editBtn.style.display = "inline-block";
   const addBtn = document.querySelector("#add-project-btn");
@@ -23,27 +25,17 @@ const openModalEdit = (projectID) => {
 const closeModal = () => {
   const modal = document.querySelector(".modal");
   const projectName = document.querySelector("#project-name");
-  const projectColor = document.querySelector("#project-color");
 
   //reset default from values upon modal form closing
   projectName.value = "";
-  projectColor.value = "#808080";
   modal.style.display = "none";
-
-  const editProjectBtn = document.querySelector("#edit-project-btn");
-  editProjectBtn.removeEventListener("click", updateProjectDisplay);
 }
 
 const addProject = () => {
   const projectName = document.querySelector("#project-name");
-  if(!projectName.value) {
-    alert("Please enter a project name!");
-  }
-  else {
-    const projectColor = document.querySelector("#project-color");
-    const id = storeProject(projectName.value, projectColor.value);
-    displayNewProject(projectName.value, id, projectColor.value);
-  }
+  const projectColor = document.querySelector("#project-color");
+  const id = storeProject(projectName.value, projectColor.value);
+  displayNewProject(projectName.value, id, projectColor.value);
 }
 
 const displayNewProject = (projectName, projectID, projectColor) => {
@@ -74,8 +66,8 @@ const dynamicProjectFormEvent = (e) => {
   }
   else if(e.target && e.target.classList.contains("edit-icon-btn")) {
     //get project ID belonging to the edit icon's project
-    const id = e.target.parentNode.dataset.id;
-    openModalEdit(id);
+    lastClickedProjectID = e.target.parentNode.dataset.id;
+    openModalEdit();
   }
 }
 
@@ -84,8 +76,19 @@ const deleteProjectDisplay = (projectID) => {
   listElement.remove();
 }
 
-const updateProjectDisplay = (projectID) => {
+const handleEditProject = () => {
+  const newName = document.querySelector("#project-name").value;
+  const newColor = document.querySelector("#project-color").value;
+  updateProject(lastClickedProjectID, newName, newColor);
 
+    const nameToEdit = document.querySelector(`[data-id=
+      "${lastClickedProjectID}"]>.project-info`);
+    nameToEdit.innerText = newName;
+
+    const iconToEdit =  document.querySelector(`[data-id=
+      "${lastClickedProjectID}"]>.project-icon`);
+    iconToEdit.style.color = newColor;
+    closeModal();
 }
 
 const createColorIcon = (iconColor) => {
@@ -120,4 +123,4 @@ const handleColorChange = () => {
 }
 
 export {openModalAdd, openModalEdit, addProject, closeModal, handleColorChange, 
-  dynamicProjectFormEvent};
+  handleEditProject, dynamicProjectFormEvent};

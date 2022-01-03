@@ -35,12 +35,12 @@
       </div>
     </div>
     <div class="modal">
-      <form id="modal-form">
+      <form id="modal-form" method="POST">
         <header class="modal-header">
           <h3>Add Project</h3>
         </header>
         <label for="project-name">Name: </label><br>
-        <input type="text" id="project-name" name="project-name"/><br>
+        <input type="text" id="project-name" name="project-name" required/><br>
         <label for="project-color">Color: </label><br>
           <label class="color-wrapper">
             <input type="color" id="project-color" name="project-color" 
@@ -48,7 +48,7 @@
           </label>
         <br>
         <button type="submit" id="add-project-btn">Add</button>
-        <button type="submit" id="edit-project-btn">Edit</button>
+        <button type="button" id="edit-project-btn">Edit</button>
         <button type="button" id="close-modal-btn">Cancel</button>
       </form>
     </div>

@@ -61,9 +61,14 @@ const storeProject = (title, color) => {
   return projectID;
 }
 
+const updateProject = (id, title, color) => {
+  const newProject = projectFactory(title, color);
+  projectList.set(id, newProject);
+}
+
 const removeProjectData = (projectID) => {
   projectList.delete(projectID);
 }
 
-export {inbox, projectList, today, thisWeek, storeProject, removeProjectData, 
-  storeTodo};
+export {inbox, projectList, today, thisWeek, storeProject, updateProject,
+  removeProjectData, storeTodo};
