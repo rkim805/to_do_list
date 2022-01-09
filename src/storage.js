@@ -42,5 +42,10 @@ const removeProjectData = (projectID) => {
   projectList.delete(projectID);
 }
 
+const getProjectTitle = (projectID) => {
+  const project = projectList.get(projectID);
+  return project.title;
+}
+
 export {inbox, projectList, today, thisWeek, storeProject, updateProject,
-  removeProjectData, storeTodo};
+  removeProjectData, getProjectTitle, storeTodo};

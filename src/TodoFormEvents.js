@@ -98,7 +98,7 @@ const addProjectSelector = (form) => {
 
   projectSelector.append(inboxOption);
 
-  for(const project of projectList) {
+  for(const [_,project] of projectList) {
     let projectOption = document.createElement("option");
     projectOption.value = project.title;
     projectOption.innerText = project.title;
@@ -160,4 +160,5 @@ const removeForm = () => {
 }
 
 export {
-  addTaskEvent, dynamicTodoFormEvent}
+  addTaskEvent, dynamicTodoFormEvent
+}

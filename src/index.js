@@ -1,6 +1,6 @@
 import {addTaskEvent, dynamicTodoFormEvent} from "./TodoFormEvents";
-import {openModalAdd, addProject, closeModal, handleColorChange, 
-  dynamicProjectFormEvent, handleEditProject} from 
+import {openProjectAddForm, addProject, closeModal, handleColorChange, 
+  dynamicProjectFormEvent, handleEditProject, handleDeleteProject} from 
   "./ProjectFormEvents"
 import './style.css';
 import '@fortawesome/fontawesome-free/js/all.js';
@@ -10,7 +10,7 @@ window.onload = () => {
   addTaskBtn.addEventListener("click", addTaskEvent);
 
   const showModalAddBtn = document.querySelector(".show-modal-btn");
-  showModalAddBtn.addEventListener("click", openModalAdd);
+  showModalAddBtn.addEventListener("click", openProjectAddForm);
   const closeModalBtn = document.querySelector("#close-modal-btn");
   closeModalBtn.addEventListener("click", closeModal);
 
@@ -27,6 +27,12 @@ window.onload = () => {
     e.preventDefault();
     handleEditProject();
   });
+
+
+  const cancelDeleteBtn = document.querySelector("#cancel-delete-btn");
+  cancelDeleteBtn.addEventListener("click", closeModal);
+  const confirmDeleteBtn = document.querySelector("#confirm-delete-btn");
+  confirmDeleteBtn.addEventListener("click", handleDeleteProject);
   
   //event delegators, used add listeners to dynamically created elements
   document.addEventListener("click", dynamicTodoFormEvent);

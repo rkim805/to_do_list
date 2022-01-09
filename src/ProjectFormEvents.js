@@ -1,23 +1,30 @@
 import { formatRelative } from "date-fns";
-import {storeProject, removeProjectData, updateProject} from "./storage";
+import {storeProject, removeProjectData, updateProject, 
+  getProjectTitle} from "./storage";
 
 let lastClickedProjectID = -1;
 
-const openModalAdd = () => {
+const openProjectAddForm = () => {
   const editBtn = document.querySelector("#edit-project-btn");
   editBtn.style.display = "none";
   const addBtn = document.querySelector("#add-project-btn");
   addBtn.style.display = "inline-block";
-  const modal = document.querySelector(".modal");
-  modal.style.display = "block";
+  openProjectFormModal();
 }
 
-const openModalEdit = () => {
+const openProjectEditForm = () => {
   const editBtn = document.querySelector("#edit-project-btn");
   editBtn.style.display = "inline-block";
   const addBtn = document.querySelector("#add-project-btn");
   addBtn.style.display = "none";
+  openProjectFormModal();
+}
 
+const openProjectFormModal = () => {
+  const projectForm = document.querySelector("#project-form");
+  projectForm.style.display = "block";
+  const deleteForm = document.querySelector("#delete-confirm-form");
+  deleteForm.style.display = "none";
   const modal = document.querySelector(".modal");
   modal.style.display = "block";
 }
@@ -29,6 +36,15 @@ const closeModal = () => {
   //reset default from values upon modal form closing
   projectName.value = "";
   modal.style.display = "none";
+}
+
+const openDeleteForm = () => {
+  const modal = document.querySelector(".modal");
+  modal.style.display = "block";
+  const projectForm = document.querySelector("#project-form");
+  projectForm.style.display = "none";
+  const deleteForm = document.querySelector("#delete-confirm-form");
+  deleteForm.style.display = "block";
 }
 
 const addProject = () => {
@@ -61,19 +77,26 @@ const displayNewProject = (projectName, projectID, projectColor) => {
 const dynamicProjectFormEvent = (e) => {
   if(e.target && e.target.classList.contains("delete-icon-btn")) {
     //get project ID belonging to the delete icon's project
-    const id = e.target.parentNode.dataset.id;
-    deleteProjectDisplay(id);
+    lastClickedProjectID = e.target.parentNode.dataset.id;
+
+    const deletePrompt = document.querySelector("#delete-prompt");
+    deletePrompt.innerHTML = `Are you sure you want to delete 
+    <strong>${getProjectTitle(lastClickedProjectID)}</strong>?`;
+    openDeleteForm();
   }
   else if(e.target && e.target.classList.contains("edit-icon-btn")) {
     //get project ID belonging to the edit icon's project
     lastClickedProjectID = e.target.parentNode.dataset.id;
-    openModalEdit();
+    openProjectEditForm();
   }
 }
 
-const deleteProjectDisplay = (projectID) => {
-  const listElement = document.querySelector(`[data-id="${projectID}"]`);
+const handleDeleteProject = () => {
+  removeProjectData(lastClickedProjectID);
+  const listElement = document.querySelector(`[data-id=
+    "${lastClickedProjectID}"]`);
   listElement.remove();
+  closeModal();
 }
 
 const handleEditProject = () => {
@@ -122,5 +145,5 @@ const handleColorChange = () => {
   colorWrapper.style.backgroundColor = colorPicker.value;
 }
 
-export {openModalAdd, openModalEdit, addProject, closeModal, handleColorChange, 
-  handleEditProject, dynamicProjectFormEvent};
+export {openProjectAddForm, addProject, closeModal, handleColorChange, 
+  handleEditProject, handleDeleteProject, dynamicProjectFormEvent};

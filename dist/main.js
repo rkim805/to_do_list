@@ -111,7 +111,7 @@ const addProjectSelector = (form) => {
 
   projectSelector.append(inboxOption);
 
-  for(const project of _storage__WEBPACK_IMPORTED_MODULE_0__.projectList) {
+  for(const [_,project] of _storage__WEBPACK_IMPORTED_MODULE_0__.projectList) {
     let projectOption = document.createElement("option");
     projectOption.value = project.title;
     projectOption.innerText = project.title;
@@ -188,6 +188,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "storeProject": () => (/* binding */ storeProject),
 /* harmony export */   "updateProject": () => (/* binding */ updateProject),
 /* harmony export */   "removeProjectData": () => (/* binding */ removeProjectData),
+/* harmony export */   "getProjectTitle": () => (/* binding */ getProjectTitle),
 /* harmony export */   "storeTodo": () => (/* binding */ storeTodo)
 /* harmony export */ });
 /* harmony import */ var _projectObj__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
@@ -235,6 +236,11 @@ const removeProjectData = (projectID) => {
   projectList.delete(projectID);
 }
 
+const getProjectTitle = (projectID) => {
+  const project = projectList.get(projectID);
+  return project.title;
+}
+
 
 
 /***/ }),
@@ -267,12 +273,12 @@ const projectFactory = (title, color) => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "openModalAdd": () => (/* binding */ openModalAdd),
-/* harmony export */   "openModalEdit": () => (/* binding */ openModalEdit),
+/* harmony export */   "openProjectAddForm": () => (/* binding */ openProjectAddForm),
 /* harmony export */   "addProject": () => (/* binding */ addProject),
 /* harmony export */   "closeModal": () => (/* binding */ closeModal),
 /* harmony export */   "handleColorChange": () => (/* binding */ handleColorChange),
 /* harmony export */   "handleEditProject": () => (/* binding */ handleEditProject),
+/* harmony export */   "handleDeleteProject": () => (/* binding */ handleDeleteProject),
 /* harmony export */   "dynamicProjectFormEvent": () => (/* binding */ dynamicProjectFormEvent)
 /* harmony export */ });
 /* harmony import */ var _storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
@@ -281,21 +287,27 @@ __webpack_require__.r(__webpack_exports__);
 
 let lastClickedProjectID = -1;
 
-const openModalAdd = () => {
+const openProjectAddForm = () => {
   const editBtn = document.querySelector("#edit-project-btn");
   editBtn.style.display = "none";
   const addBtn = document.querySelector("#add-project-btn");
   addBtn.style.display = "inline-block";
-  const modal = document.querySelector(".modal");
-  modal.style.display = "block";
+  openProjectFormModal();
 }
 
-const openModalEdit = () => {
+const openProjectEditForm = () => {
   const editBtn = document.querySelector("#edit-project-btn");
   editBtn.style.display = "inline-block";
   const addBtn = document.querySelector("#add-project-btn");
   addBtn.style.display = "none";
+  openProjectFormModal();
+}
 
+const openProjectFormModal = () => {
+  const projectForm = document.querySelector("#project-form");
+  projectForm.style.display = "block";
+  const deleteForm = document.querySelector("#delete-confirm-form");
+  deleteForm.style.display = "none";
   const modal = document.querySelector(".modal");
   modal.style.display = "block";
 }
@@ -307,6 +319,15 @@ const closeModal = () => {
   //reset default from values upon modal form closing
   projectName.value = "";
   modal.style.display = "none";
+}
+
+const openDeleteForm = () => {
+  const modal = document.querySelector(".modal");
+  modal.style.display = "block";
+  const projectForm = document.querySelector("#project-form");
+  projectForm.style.display = "none";
+  const deleteForm = document.querySelector("#delete-confirm-form");
+  deleteForm.style.display = "block";
 }
 
 const addProject = () => {
@@ -339,19 +360,26 @@ const displayNewProject = (projectName, projectID, projectColor) => {
 const dynamicProjectFormEvent = (e) => {
   if(e.target && e.target.classList.contains("delete-icon-btn")) {
     //get project ID belonging to the delete icon's project
-    const id = e.target.parentNode.dataset.id;
-    deleteProjectDisplay(id);
+    lastClickedProjectID = e.target.parentNode.dataset.id;
+
+    const deletePrompt = document.querySelector("#delete-prompt");
+    deletePrompt.innerHTML = `Are you sure you want to delete 
+    <strong>${(0,_storage__WEBPACK_IMPORTED_MODULE_0__.getProjectTitle)(lastClickedProjectID)}</strong>?`;
+    openDeleteForm();
   }
   else if(e.target && e.target.classList.contains("edit-icon-btn")) {
     //get project ID belonging to the edit icon's project
     lastClickedProjectID = e.target.parentNode.dataset.id;
-    openModalEdit();
+    openProjectEditForm();
   }
 }
 
-const deleteProjectDisplay = (projectID) => {
-  const listElement = document.querySelector(`[data-id="${projectID}"]`);
+const handleDeleteProject = () => {
+  ;(0,_storage__WEBPACK_IMPORTED_MODULE_0__.removeProjectData)(lastClickedProjectID);
+  const listElement = document.querySelector(`[data-id=
+    "${lastClickedProjectID}"]`);
   listElement.remove();
+  closeModal();
 }
 
 const handleEditProject = () => {
@@ -759,7 +787,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "html,body {\n  margin: 0px;\n  padding: 0px;\n  height: 100%;\n}\n\nbody {\n  display: flex;\n  flex-direction: column;\n  font-family: 'Dancing Script', cursive;\n  font-family: 'Montserrat', sans-serif;\n  font-weight: 800;\n}\n\nheader {\n  display: flex;\n  align-items: center;\n  box-sizing: border-box;\n  height: 44px;\n  width: 100%;\n  background-color: #333;\n  padding: 10px 16px;\n  margin: 0px;\n  color: white;\n}\n\nh1 {\n  font-size: 32px;\n}\n\nfooter {\n  color: white;\n  height: 22px;\n  background-color: #333;\n  text-align: center;\n  flex-shrink: 0;\n  width: 100%\n}\n\n#primary-content {\n  flex: 1 0 auto;\n}\n\n.modal {\n  display: none;\n  position: fixed;\n  padding-top: 50px;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background-color: black;\n  background-color: rgba(0, 0, 0, 0.5);\n}\n\n#modal-form {\n  position: relative;\n  background-color: white;\n  padding: 5px 24px 20px 24px;\n  margin: auto;\n  width: 240px;\n  border-radius: 5px;\n}\n\n.modal-header {\n  position: relative;\n  display: flex;\n  align-items: center;\n  color: black;\n  background-color: white;\n  border-bottom: 1px solid #ddd;\n  margin-bottom: 5px;\n}\n\ninput {\n  margin: 10px 0px;\n}\n\n#modal-form button {\n  margin: 5px 0px 10px 0px;\n  padding: 5px;\n  border-radius: 5px;\n  border: none;\n}\n\n#add-project-btn, #edit-project-btn {\n  background-color: rgb(77, 77, 185);\n  color: white;\n}\n\n#add-project-btn:hover {\n  background-color: rgb(48, 64, 151);\n}\n\n#close-modal-btn {\n  background-color: #bbbbbb;\n}\n\n#close-modal-btn:hover {\n  background-color: #a8a8a8;\n}\n\n#task-btn {\n  border: none;\n  font-size: 16px;\n  background-color: white;\n}\n\n#task-btn:hover {\n  border: none;\n  color: orangered\n}\n\nnav {\n  display: flex;\n  flex-direction: column;\n  align-items: flex-start;\n  min-width: 285px;\n  background-color: #ededf3;\n}\n\nul {\n  list-style-type: none;\n  font-size: 24px;\n}\n\nli {\n  margin: 16px 0px;\n}\n\n/* Remove default button styling for Font Awesome Icon button */\n.show-modal-btn {\n  border: none;\n  padding: 0;\n  outline: inherit;\n  background: none;\n  color: gray;\n  font: inherit;\n}\n\n.show-modal-btn:hover {\n  color: black;\n}\n\n.edit-icon-btn, .delete-icon-btn {\n  border: none;\n  padding: 0;\n  outline: inherit;\n  background: none;\n  color: black;\n  font: inherit;\n  vertical-align: top;\n}\n\n\n#primary-content {\n  display: flex;\n}\n\n#list-app {\n  margin-left: 20px;\n}\n\n#title-input, #description-input {\n  padding: 3px;\n  width: 100%;\n  margin: 0px;\n  border: solid;\n  border-width: 1px;\n  border-radius: 2px;\n}\n\n#description-input {\n  height: 80px;\n}\n\n/* Create placeholder for contentEditable divs with text equal to data-ph*/\n#description-input[contentEditable=true]:empty:before {\n   content: attr(data-ph);\n   color: #999\n};\n\n#add-task-btn-form input, #add-task-btn-form select{ \n  margin-left: 2px;\n}\n\n\n#project-color {\n  visibility: hidden;\n}\n\n.color-wrapper {\n  display: block;\n  height: 48px;\n  width: 48px;\n  border-radius: 50%;\n  border-style: double;\n  border-width: 5px;\n  border-color: #d3d3d3;\n  background-color: #808080;\n  margin-top: 10px;\n}\n\n.dropdown-content { \n  display: none;\n  background-color: #f3f3f3;\n  max-width: 160px;\n}\n\n#project-list li {\n  font-size: 18px;\n}\n\n#project-list {\n  margin-right: 5px;\n}\n\n.project-info {\n  overflow: hidden;\n  width: 10ch;\n  display: inline-block;\n  text-overflow: ellipsis;\n}\n\n.delete-icon, .edit-icon {\n  float: right;\n  margin-right: 7px;\n}\n\n.project-icon {\n  margin-right: 5px;\n  vertical-align: top;\n}\n\n.delete-icon:hover {\n  color: red;\n}\n\n.edit-icon:hover {\n  color: blue;\n}\n\n/* Used to ensure Font Awesome icon spans are clicked instead of svgs */\nnav svg:active {\n  pointer-events: none;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "html,body {\n  margin: 0px;\n  padding: 0px;\n  height: 100%;\n}\n\nbody {\n  display: flex;\n  flex-direction: column;\n  font-family: 'Dancing Script', cursive;\n  font-family: 'Montserrat', sans-serif;\n  font-weight: 800;\n}\n\nheader {\n  display: flex;\n  align-items: center;\n  box-sizing: border-box;\n  height: 44px;\n  width: 100%;\n  background-color: #333;\n  padding: 10px 16px;\n  margin: 0px;\n  color: white;\n}\n\nh1 {\n  font-size: 32px;\n}\n\nfooter {\n  color: white;\n  height: 22px;\n  background-color: #333;\n  text-align: center;\n  flex-shrink: 0;\n  width: 100%\n}\n\n#primary-content {\n  flex: 1 0 auto;\n}\n\n.modal {\n  display: none;\n  position: fixed;\n  padding-top: 50px;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background-color: black;\n  background-color: rgba(0, 0, 0, 0.5);\n}\n\n#project-form, #delete-confirm-form {\n  position: relative;\n  background-color: white;\n  padding: 5px 24px 20px 24px;\n  margin: auto;\n  width: 240px;\n  border-radius: 5px;\n}\n\n#delete-confirm-form {\n  display: none;\n}\n\n.project-form-header {\n  position: relative;\n  display: flex;\n  align-items: center;\n  color: black;\n  background-color: white;\n  border-bottom: 1px solid #ddd;\n  margin-bottom: 5px;\n}\n\ninput {\n  margin: 10px 0px;\n}\n\n#delete-confirm-form button, #project-form button {\n  margin: 5px 0px 10px 0px;\n  padding: 5px;\n  border-radius: 5px;\n  border: none;\n}\n\n#cancel-delete-btn {\n  background-color: #bbbbbb;\n\n}\n\n#add-project-btn, #edit-project-btn {\n  background-color: rgb(77, 77, 185);\n  color: white;\n}\n\n#add-project-btn:hover, #edit-project-btn:hover {\n  background-color: rgb(48, 64, 151);\n}\n\n#close-modal-btn, #cancel-delete-btn {\n  background-color: #bbbbbb;\n}\n\n#close-modal-btn:hover, #cancel-delete-btn:hover {\n  background-color: #a8a8a8;\n}\n\n#confirm-delete-btn {\n  background-color: orangered;\n}\n\n#confirm-delete-btn:hover {\n  background-color: rgb(206, 62, 10);\n}\n\n#task-btn {\n  border: none;\n  font-size: 16px;\n  background-color: white;\n}\n\n#task-btn:hover {\n  border: none;\n  color: orangered\n}\n\nnav {\n  display: flex;\n  flex-direction: column;\n  align-items: flex-start;\n  min-width: 285px;\n  background-color: #ededf3;\n}\n\nnav ul {\n  list-style-type: none;\n  font-size: 24px;\n}\n\nnav li {\n  margin: 16px 0px;\n}\n\nbutton {\n  cursor: pointer;\n}\n\n/* Remove default button styling for Font Awesome Icon button */\n.show-modal-btn {\n  border: none;\n  padding: 0;\n  outline: inherit;\n  background: none;\n  color: gray;\n  font: inherit;\n}\n\n.show-modal-btn:hover {\n  color: black;\n}\n\n.edit-icon-btn, .delete-icon-btn {\n  border: none;\n  padding: 0;\n  outline: inherit;\n  background: none;\n  color: black;\n  font: inherit;\n  vertical-align: top;\n}\n\n\n#primary-content {\n  display: flex;\n}\n\n#list-app {\n  margin-left: 20px;\n}\n\n#title-input, #description-input {\n  padding: 3px;\n  width: 100%;\n  margin: 0px;\n  border: solid;\n  border-width: 1px;\n  border-radius: 2px;\n}\n\n#description-input {\n  height: 80px;\n}\n\n/* Create placeholder for contentEditable divs with text equal to data-ph*/\n#description-input[contentEditable=true]:empty:before {\n   content: attr(data-ph);\n   color: #999\n};\n\n#add-task-btn-form input, #add-task-btn-form select{ \n  margin-left: 2px;\n}\n\n\n#project-color {\n  visibility: hidden;\n}\n\n.color-wrapper {\n  display: block;\n  height: 48px;\n  width: 48px;\n  border-radius: 50%;\n  border-style: double;\n  border-width: 5px;\n  border-color: #d3d3d3;\n  background-color: #808080;\n  margin-top: 10px;\n}\n\n.dropdown-content { \n  display: none;\n  background-color: #f3f3f3;\n  max-width: 160px;\n}\n\n#project-list li {\n  font-size: 18px;\n}\n\n#project-list {\n  margin-right: 5px;\n}\n\n.project-info {\n  overflow: hidden;\n  width: 10ch;\n  display: inline-block;\n  text-overflow: ellipsis;\n}\n\n.delete-icon, .edit-icon {\n  float: right;\n  margin-right: 7px;\n}\n\n.project-icon {\n  margin-right: 5px;\n  vertical-align: top;\n}\n\n.delete-icon:hover {\n  color: red;\n}\n\n.edit-icon:hover {\n  color: blue;\n}\n\n/* Used to ensure Font Awesome icon spans are clicked instead of svgs */\nnav svg:active {\n  pointer-events: none;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -5456,7 +5484,7 @@ window.onload = () => {
   addTaskBtn.addEventListener("click", _TodoFormEvents__WEBPACK_IMPORTED_MODULE_0__.addTaskEvent);
 
   const showModalAddBtn = document.querySelector(".show-modal-btn");
-  showModalAddBtn.addEventListener("click", _ProjectFormEvents__WEBPACK_IMPORTED_MODULE_1__.openModalAdd);
+  showModalAddBtn.addEventListener("click", _ProjectFormEvents__WEBPACK_IMPORTED_MODULE_1__.openProjectAddForm);
   const closeModalBtn = document.querySelector("#close-modal-btn");
   closeModalBtn.addEventListener("click", _ProjectFormEvents__WEBPACK_IMPORTED_MODULE_1__.closeModal);
 
@@ -5473,6 +5501,12 @@ window.onload = () => {
     e.preventDefault();
     (0,_ProjectFormEvents__WEBPACK_IMPORTED_MODULE_1__.handleEditProject)();
   });
+
+
+  const cancelDeleteBtn = document.querySelector("#cancel-delete-btn");
+  cancelDeleteBtn.addEventListener("click", _ProjectFormEvents__WEBPACK_IMPORTED_MODULE_1__.closeModal);
+  const confirmDeleteBtn = document.querySelector("#confirm-delete-btn");
+  confirmDeleteBtn.addEventListener("click", _ProjectFormEvents__WEBPACK_IMPORTED_MODULE_1__.handleDeleteProject);
   
   //event delegators, used add listeners to dynamically created elements
   document.addEventListener("click", _TodoFormEvents__WEBPACK_IMPORTED_MODULE_0__.dynamicTodoFormEvent);

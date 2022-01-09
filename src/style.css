@@ -53,7 +53,7 @@ footer {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-#modal-form {
+#project-form, #delete-confirm-form {
   position: relative;
   background-color: white;
   padding: 5px 24px 20px 24px;
@@ -62,7 +62,11 @@ footer {
   border-radius: 5px;
 }
 
-.modal-header {
+#delete-confirm-form {
+  display: none;
+}
+
+.project-form-header {
   position: relative;
   display: flex;
   align-items: center;
@@ -76,11 +80,16 @@ input {
   margin: 10px 0px;
 }
 
-#modal-form button {
+#delete-confirm-form button, #project-form button {
   margin: 5px 0px 10px 0px;
   padding: 5px;
   border-radius: 5px;
   border: none;
+}
+
+#cancel-delete-btn {
+  background-color: #bbbbbb;
+
 }
 
 #add-project-btn, #edit-project-btn {
@@ -88,16 +97,24 @@ input {
   color: white;
 }
 
-#add-project-btn:hover {
+#add-project-btn:hover, #edit-project-btn:hover {
   background-color: rgb(48, 64, 151);
 }
 
-#close-modal-btn {
+#close-modal-btn, #cancel-delete-btn {
   background-color: #bbbbbb;
 }
 
-#close-modal-btn:hover {
+#close-modal-btn:hover, #cancel-delete-btn:hover {
   background-color: #a8a8a8;
+}
+
+#confirm-delete-btn {
+  background-color: orangered;
+}
+
+#confirm-delete-btn:hover {
+  background-color: rgb(206, 62, 10);
 }
 
 #task-btn {
@@ -119,13 +136,17 @@ nav {
   background-color: #ededf3;
 }
 
-ul {
+nav ul {
   list-style-type: none;
   font-size: 24px;
 }
 
-li {
+nav li {
   margin: 16px 0px;
+}
+
+button {
+  cursor: pointer;
 }
 
 /* Remove default button styling for Font Awesome Icon button */

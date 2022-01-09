@@ -29,15 +29,21 @@
         </ul>
       </nav>
       <div id="list-app">
+        <h2>Inbox</h3>
         <ul id="listed-todos">
         </ul>
         <button id="task-btn"><i class="fas fa-plus"></i> Add Task</button>
       </div>
     </div>
     <div class="modal">
-      <form id="modal-form" method="POST">
-        <header class="modal-header">
-          <h3>Add Project</h3>
+      <form id="delete-confirm-form">
+        <p id="delete-prompt"></p>
+        <button type="button" id="cancel-delete-btn">Cancel</button>
+        <button type="button" id="confirm-delete-btn">Delete</button>
+      </form>
+      <form id="project-form">
+        <header class="project-form-header">
+          <p>Add Project<p>
         </header>
         <label for="project-name">Name: </label><br>
         <input type="text" id="project-name" name="project-name" required/><br>
