@@ -15,17 +15,24 @@ window.onload = () => {
   closeModalBtn.addEventListener("click", closeModal);
 
   //project form input event listeners
+  const projectForm = document.querySelector("#project-form");
   const colorPicker = document.querySelector("#project-color");
   colorPicker.addEventListener("change", handleColorChange);
   const addProjectBtn = document.querySelector("#add-project-btn");
   addProjectBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    addProject();
+    const isValid = projectForm.reportValidity();
+    if(isValid) {
+      addProject();
+    }
   });
   const editProjectBtn = document.querySelector("#edit-project-btn");
   editProjectBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    handleEditProject();
+    let isValid = projectForm.reportValidity();
+    if(isValid) {
+      handleEditProject();
+    }
   });
 
 

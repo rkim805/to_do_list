@@ -96,7 +96,24 @@ const handleDeleteProject = () => {
   const listElement = document.querySelector(`[data-id=
     "${lastClickedProjectID}"]`);
   listElement.remove();
+  deleteFromProjectSelector();
   closeModal();
+}
+
+
+/**
+ * Function to delete a project from the todo form's project selector, to
+ * ensure a deleted project cannot be selected for a new todo.
+ */
+const deleteFromProjectSelector = () => {
+  const projectSelector = document.querySelector("#project-selector");
+  if(projectSelector != null) {
+    const projectOption = document.querySelector(`option[data-id=
+      "${lastClickedProjectID}"]`);
+    projectOption.remove();
+  }
+  //Default back to inbox
+  projectSelector.value = "inbox";
 }
 
 const handleEditProject = () => {

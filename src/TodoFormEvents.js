@@ -21,7 +21,7 @@ const createTaskForm = () => {
 }
 
 const addTaskFormInputs = (inputlessForm) => {
-  const title = hiddenLabelInput("text", "title-input", "Title");
+  const title = hiddenLabelInput("text", "title-input", "Title", false, true);
   const description = hiddenLabelInput("text", "description-input", 
   "Description", true);
   const date = hiddenLabelInput("date", "date-input");
@@ -52,7 +52,8 @@ const addTaskFormInputs = (inputlessForm) => {
  * @returns Object containing {label, input} for specified options, with label
  * hidden.
  */
-const hiddenLabelInput = (inputType, id, placeholder="", multiLine = false) => {
+const hiddenLabelInput = (inputType, id, placeholder="", multiLine = false, 
+  required = false) => {
   const label = document.createElement("label");
   label.hidden = true;
   label.for = id;
@@ -65,6 +66,9 @@ const hiddenLabelInput = (inputType, id, placeholder="", multiLine = false) => {
   else {
     input = document.createElement("input");
     input.type = inputType;
+  }
+  if(required) {
+    input.required = true;
   }
   input.id = id;
   input.name = id;
@@ -98,10 +102,11 @@ const addProjectSelector = (form) => {
 
   projectSelector.append(inboxOption);
 
-  for(const [_,project] of projectList) {
+  for(const [key, project] of projectList) {
     let projectOption = document.createElement("option");
     projectOption.value = project.title;
     projectOption.innerText = project.title;
+    projectOption.dataset.id = key;
     projectSelector.append(projectOption);
   }
   
@@ -139,10 +144,20 @@ const dynamicTodoFormEvent = (e) => {
 }
 
 const confirmAddEvent = () => {
-  removeForm();
-
-  const addTaskBtn = document.querySelector("#task-btn");
-  addTaskBtn.style.display = "block";
+  const form = document.querySelector("#add-task-form");
+  const isValid = form.reportValidity();
+  if(isValid) {
+    const title = document.querySelector("#title-input").value;
+    const description = document.querySelector("#description-input").innerText;
+    const date =  document.querySelector("#date-input").value;
+    const projectTitle = document.querySelector("#project-selector").value;
+    const priority = document.querySelector("#priority-selector").value;
+    //console.log(date);
+    //console.log(description);
+    removeForm();
+    const addTaskBtn = document.querySelector("#task-btn");
+    addTaskBtn.style.display = "block";
+  }
 }
 
 const cancelAddEvent = () => {

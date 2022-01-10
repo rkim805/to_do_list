@@ -34,7 +34,7 @@ const createTaskForm = () => {
 }
 
 const addTaskFormInputs = (inputlessForm) => {
-  const title = hiddenLabelInput("text", "title-input", "Title");
+  const title = hiddenLabelInput("text", "title-input", "Title", false, true);
   const description = hiddenLabelInput("text", "description-input", 
   "Description", true);
   const date = hiddenLabelInput("date", "date-input");
@@ -65,7 +65,8 @@ const addTaskFormInputs = (inputlessForm) => {
  * @returns Object containing {label, input} for specified options, with label
  * hidden.
  */
-const hiddenLabelInput = (inputType, id, placeholder="", multiLine = false) => {
+const hiddenLabelInput = (inputType, id, placeholder="", multiLine = false, 
+  required = false) => {
   const label = document.createElement("label");
   label.hidden = true;
   label.for = id;
@@ -78,6 +79,9 @@ const hiddenLabelInput = (inputType, id, placeholder="", multiLine = false) => {
   else {
     input = document.createElement("input");
     input.type = inputType;
+  }
+  if(required) {
+    input.required = true;
   }
   input.id = id;
   input.name = id;
@@ -111,10 +115,11 @@ const addProjectSelector = (form) => {
 
   projectSelector.append(inboxOption);
 
-  for(const [_,project] of _storage__WEBPACK_IMPORTED_MODULE_0__.projectList) {
+  for(const [key, project] of _storage__WEBPACK_IMPORTED_MODULE_0__.projectList) {
     let projectOption = document.createElement("option");
     projectOption.value = project.title;
     projectOption.innerText = project.title;
+    projectOption.dataset.id = key;
     projectSelector.append(projectOption);
   }
   
@@ -152,10 +157,20 @@ const dynamicTodoFormEvent = (e) => {
 }
 
 const confirmAddEvent = () => {
-  removeForm();
-
-  const addTaskBtn = document.querySelector("#task-btn");
-  addTaskBtn.style.display = "block";
+  const form = document.querySelector("#add-task-form");
+  const isValid = form.reportValidity();
+  if(isValid) {
+    const title = document.querySelector("#title-input").value;
+    const description = document.querySelector("#description-input").innerText;
+    const date =  document.querySelector("#date-input").value;
+    const projectTitle = document.querySelector("#project-selector").value;
+    const priority = document.querySelector("#priority-selector").value;
+    //console.log(date);
+    //console.log(description);
+    removeForm();
+    const addTaskBtn = document.querySelector("#task-btn");
+    addTaskBtn.style.display = "block";
+  }
 }
 
 const cancelAddEvent = () => {
@@ -379,7 +394,24 @@ const handleDeleteProject = () => {
   const listElement = document.querySelector(`[data-id=
     "${lastClickedProjectID}"]`);
   listElement.remove();
+  deleteFromProjectSelector();
   closeModal();
+}
+
+
+/**
+ * Function to delete a project from the todo form's project selector, to
+ * ensure a deleted project cannot be selected for a new todo.
+ */
+const deleteFromProjectSelector = () => {
+  const projectSelector = document.querySelector("#project-selector");
+  if(projectSelector != null) {
+    const projectOption = document.querySelector(`option[data-id=
+      "${lastClickedProjectID}"]`);
+    projectOption.remove();
+  }
+  //Default back to inbox
+  projectSelector.value = "inbox";
 }
 
 const handleEditProject = () => {
@@ -5489,17 +5521,24 @@ window.onload = () => {
   closeModalBtn.addEventListener("click", _ProjectFormEvents__WEBPACK_IMPORTED_MODULE_1__.closeModal);
 
   //project form input event listeners
+  const projectForm = document.querySelector("#project-form");
   const colorPicker = document.querySelector("#project-color");
   colorPicker.addEventListener("change", _ProjectFormEvents__WEBPACK_IMPORTED_MODULE_1__.handleColorChange);
   const addProjectBtn = document.querySelector("#add-project-btn");
   addProjectBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    (0,_ProjectFormEvents__WEBPACK_IMPORTED_MODULE_1__.addProject)();
+    const isValid = projectForm.reportValidity();
+    if(isValid) {
+      (0,_ProjectFormEvents__WEBPACK_IMPORTED_MODULE_1__.addProject)();
+    }
   });
   const editProjectBtn = document.querySelector("#edit-project-btn");
   editProjectBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    (0,_ProjectFormEvents__WEBPACK_IMPORTED_MODULE_1__.handleEditProject)();
+    let isValid = projectForm.reportValidity();
+    if(isValid) {
+      (0,_ProjectFormEvents__WEBPACK_IMPORTED_MODULE_1__.handleEditProject)();
+    }
   });
 
 
